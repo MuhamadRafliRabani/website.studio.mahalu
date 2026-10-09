@@ -1,0 +1,63 @@
+---
+import FooterCTA from '../components/FooterCTA.astro';
+import Navigation from '../components/Navigation.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Ruang Produksi Visual Mahalu Studio" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Raleway:wght@500;600;700;800&display=swap" rel="stylesheet" />
+		
+		<!-- Phosphor Icons Web -->
+		<script src="https://unpkg.com/@phosphor-icons/web" is:inline></script>
+		
+		<!-- MapLibre CSS -->
+		<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+	</head>
+	<body class="bg-bg text-text font-body leading-relaxed relative overflow-x-hidden transition-colors duration-350 ease-in-out">
+	<Navigation />
+
+
+		<slot />
+		<FooterCTA />
+
+		<script>
+			const initThemeToggle = () => {
+				const root = document.documentElement;
+				const toggle = document.getElementById("themeToggle");
+				if (!toggle) return;
+				
+				toggle.addEventListener("click", () => {
+					const isDark = root.getAttribute("data-theme") === "dark";
+					if (isDark) {
+						root.removeAttribute("data-theme");
+						toggle.setAttribute("aria-pressed", "false");
+						toggle.setAttribute("aria-label", "Ganti ke mode gelap");
+					} else {
+						root.setAttribute("data-theme", "dark");
+						toggle.setAttribute("aria-pressed", "true");
+						toggle.setAttribute("aria-label", "Ganti ke mode terang");
+					}
+				});
+			};
+
+			initThemeToggle();
+		</script>
+	</body>
+</html>

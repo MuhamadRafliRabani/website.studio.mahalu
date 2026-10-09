@@ -1,0 +1,65 @@
+---
+import ApertureIcon from './ApertureIcon.astro';
+---
+<section class="sec-block" id="ruangan">
+	<div class="kicker sec-anim">
+		<ApertureIcon />
+		<span>Pilihan Ruang</span>
+	</div>
+	
+	<div class="mb-[36px] sec-anim">
+		<h2 class="font-display text-[26px] font-bold tracking-tight mb-[8px]">Dua ruang, dua karakter cahaya</h2>
+		<p class="text-text-muted text-[15px] max-w-[560px] font-body">
+			Pilih sesuai kebutuhan produksi — kontrol cahaya penuh atau nuansa alami.
+		</p>
+	</div>
+	
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-[22px] sec-anim">
+		
+		<!-- Room 01 -->
+		<div class="bg-card backdrop-blur-[14px] border border-border rounded-[8px] overflow-hidden card-hover">
+			<div class="relative h-[310px] bg-bg-soft flex items-center justify-center text-text-dim text-[13px] origin-bottom focus-frame transition-colors duration-350">
+				<!-- Gunakan placeholder image jika belum ada -->
+				<img src="/assets/image/studio-1.jpg" alt="Studio 01, Cyclorama Putih" class="absolute inset-0 w-full h-full object-cover block" />
+				<span class="fc fc-tl" aria-hidden="true"></span>
+				<span class="fc fc-tr" aria-hidden="true"></span>
+				<span class="fc fc-bl" aria-hidden="true"></span>
+				<span class="fc fc-br" aria-hidden="true"></span>
+			</div>
+			<div class="p-[22px]">
+				<h3 class="font-display font-bold text-[20px] mb-[8px]">Studio 01 — White Cyclorama</h3>
+				<p class="text-[14px] text-text-muted font-body mb-[18px]">
+					Dinding infinity putih untuk editorial fashion, katalog e-commerce, dan video komersial dengan kontrol cahaya artifisial penuh.
+				</p>
+				<div class="flex flex-wrap gap-[18px] text-[12.5px] text-text-muted border-t border-border pt-[14px] font-body">
+					<span>Ukuran<strong class="text-text block mt-[2px] font-title text-[13px]">8 × 6 m</strong></span>
+					<span>Listrik<strong class="text-text block mt-[2px] font-title text-[13px]">5.500 VA</strong></span>
+					<span>Kapasitas<strong class="text-text block mt-[2px] font-title text-[13px]">15 orang</strong></span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Room 02 -->
+		<div class="bg-card backdrop-blur-[14px] border border-border rounded-[8px] overflow-hidden card-hover">
+			<div class="relative h-[310px] bg-bg-soft flex items-center justify-center text-text-dim text-[13px] origin-bottom focus-frame transition-colors duration-350">
+				<img src="/assets/image/studio-2.jpg" alt="Studio 02, Daylight & Concrete" class="absolute inset-0 w-full h-full object-cover block" />
+				<span class="fc fc-tl" aria-hidden="true"></span>
+				<span class="fc fc-tr" aria-hidden="true"></span>
+				<span class="fc fc-bl" aria-hidden="true"></span>
+				<span class="fc fc-br" aria-hidden="true"></span>
+			</div>
+			<div class="p-[22px]">
+				<h3 class="font-display font-bold text-[20px] mb-[8px]">Studio 02 — Daylight & Raw Mood</h3>
+				<p class="text-[14px] text-text-muted font-body mb-[18px]">
+					Jendela utara berukuran besar dengan cahaya alami lembut sepanjang hari, dinding semen bertekstur, lantai kayu.
+				</p>
+				<div class="flex flex-wrap gap-[18px] text-[12.5px] text-text-muted border-t border-border pt-[14px] font-body">
+					<span>Ukuran<strong class="text-text block mt-[2px] font-title text-[13px]">6 × 5 m</strong></span>
+					<span>Listrik<strong class="text-text block mt-[2px] font-title text-[13px]">3.500 VA</strong></span>
+					<span>Kapasitas<strong class="text-text block mt-[2px] font-title text-[13px]">8 orang</strong></span>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</section>

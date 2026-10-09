@@ -1,0 +1,84 @@
+---
+// Adjust this import path if your layouts folder differs
+// INI FILE YG YG JADI CONTOH DAN BAYAGAN GIMAN TEMA WEBSITE SAYA
+import { rooms } from "../../data/dummy/rooms.ts";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Ruangan — Mahalu Studio">
+	<section class="sec-block relative overflow-hidden">
+		<div class="grid-bg"></div>
+		<div class="grain"></div>
+		<div class="container-wrap pt-10 md:pt-20">
+			<p class="kicker"><i class="ph ph-squares-four"></i>Pilihan Ruangan</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1]">
+				Dua ruang, dua karakter cahaya
+			</h1>
+			<p class="font-body text-text-muted max-w-xl mt-4 text-[15.5px] leading-relaxed">
+				Bandingkan spesifikasi singkat di bawah, atau langsung buka detail ruangan untuk lihat galeri, denah, dan harga lengkap.
+			</p>
+		</div>
+	</section>
+
+	<section class="sec-block">
+		<div class="container-wrap">
+			<div class="overflow-x-auto rounded-2xl border border-border bg-card">
+				<table class="w-full text-left border-collapse min-w-[560px]">
+					<thead>
+						<tr class="border-b border-border">
+							<th class="font-title text-[12px] uppercase tracking-wider text-text-dim font-semibold px-6 py-4">Spesifikasi</th>
+							{rooms.map((room) => (
+								<th class="font-title text-[13px] text-text font-semibold px-6 py-4">{room.shortName}</th>
+							))}
+						</tr>
+					</thead>
+					<tbody>
+						{["Ukuran ruang", "Daya listrik", "Kapasitas kru"].map((label) => (
+							<tr class="border-b border-border last:border-none">
+								<td class="font-body text-[13.5px] text-text-dim px-6 py-3.5">{label}</td>
+								{rooms.map((room) => {
+									const spec = room.specs.find((s) => s.label === label);
+									return <td class="font-body text-[13.5px] text-text px-6 py-3.5">{spec?.value ?? "—"}</td>;
+								})}
+							</tr>
+						))}
+						<tr>
+							<td class="font-body text-[13.5px] text-text-dim px-6 py-3.5">Mulai dari</td>
+							{rooms.map((room) => (
+								<td class="font-title text-[13.5px] text-accent font-semibold px-6 py-3.5">{room.pricing[0].price} / jam</td>
+							))}
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec-block">
+		<div class="container-wrap grid gap-7 md:grid-cols-2">
+			{rooms.map((room) => (
+				<a href={`/ruangan/${room.slug}`} class="card-hover focus-frame group block rounded-2xl border border-border bg-card overflow-hidden">
+					<span class="fc fc-tl"></span>
+					<span class="fc fc-tr"></span>
+					<span class="fc fc-bl"></span>
+					<span class="fc fc-br"></span>
+
+					<div class="aspect-[4/3] bg-bg-soft overflow-hidden">
+						<img src={room.heroImage} alt={room.name} class="w-full h-full object-cover" loading="lazy" />
+					</div>
+					<div class="p-6">
+						<h2 class="font-display text-2xl text-text font-semibold mb-2">{room.name}</h2>
+						<p class="font-body text-[14px] text-text-muted mb-5 leading-relaxed">{room.tagline}</p>
+						<div class="flex items-center justify-between border-t border-border pt-4">
+							<span class="font-title text-[13px] text-text-dim">Mulai {room.pricing[0].price}<span class="text-text-dim">/jam</span></span>
+							<span class="font-title text-[13px] text-accent font-semibold inline-flex items-center gap-1.5">
+								Lihat Detail
+								<i class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+							</span>
+						</div>
+					</div>
+				</a>
+			))}
+		</div>
+	</section>
+</Layout>

@@ -1,0 +1,87 @@
+---
+import ApertureIcon from './ApertureIcon.astro';
+---
+<header class="py-[72px] md:pt-[48px] md:pb-[60px] grid grid-cols-1 md:grid-cols-[1fr_0.85fr] gap-[52px] items-center border-b border-border">
+	
+	<!-- Bagian Teks (Kiri) -->
+	<div>
+		<div class="hero-anim flex items-center gap-2 text-accent text-[12px] tracking-[0.14em] uppercase font-title font-bold mb-[14px]">
+			<ApertureIcon />
+			<span>Studio Foto &amp; Video — Depok</span>
+		</div>
+		
+		<!-- Headline menggunakan Cormorant Garamond -->
+		<h1 class="hero-anim font-display text-[clamp(34px,4.2vw,50px)] leading-[1.15] font-bold tracking-tight mb-[18px]">
+			Ruang yang sudah diatur pencahayaannya, tinggal Anda yang memotret.
+		</h1>
+		
+		<!-- Deskripsi menggunakan Plus Jakarta Sans -->
+		<p class="hero-anim text-text-muted text-[16.5px] max-w-[520px] mb-[32px] font-body">
+			Studio rental independen di Depok untuk lookbook brand, foto produk, dan produksi komersial. Lighting, kru on-set, dan daya listrik tinggi sudah termasuk — tanpa biaya tersembunyi.
+		</p>
+		
+		<div class="hero-anim flex flex-wrap gap-[14px] mb-[36px]">
+			<button class="bg-accent text-[#fff8ee] px-[26px] py-[14px] border-none rounded-[4px] font-title font-semibold text-[14.5px] cursor-pointer btn-shutter">
+				Cek Jadwal & Booking
+			</button>
+			<a href="#ruangan" class="bg-transparent text-text px-[24px] py-[14px] border border-border rounded-[4px] font-title text-[14.5px] cursor-pointer inline-flex items-center justify-center transition-colors duration-250 hover:border-text-dim no-underline btn-shutter">
+				Lihat Kedua Ruangan
+			</a>
+		</div>
+		
+		<!-- Hero Facts dengan Phosphor Icons -->
+		<div class="hero-anim flex flex-wrap gap-[36px]">
+			<div class="flex items-start gap-[9px]">
+				<i class="ph ph-clock text-accent mt-[3px] text-[15px]"></i>
+				<div>
+					<p class="text-[13px] text-text-dim mb-[3px]">Berdiri sejak</p>
+					<p class="text-[14.5px] font-semibold font-title">2021</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-[9px]">
+				<i class="ph ph-film-strip text-accent mt-[3px] text-[15px]"></i>
+				<div>
+					<p class="text-[13px] text-text-dim mb-[3px]">Produksi selesai</p>
+					<p class="text-[14.5px] font-semibold font-title">640+ sesi</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-[9px]">
+				<i class="ph ph-map-pin text-accent mt-[3px] text-[15px]"></i>
+				<div>
+					<p class="text-[13px] text-text-dim mb-[3px]">Lokasi</p>
+					<p class="text-[14.5px] font-semibold font-title">Cilodong, Depok</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Viewfinder Frame (Kanan) -->
+	<div class="hero-img-container relative aspect-[4/5] bg-bg-soft rounded-[8px] flex items-end justify-center text-text-dim text-[13px] overflow-hidden transition-colors duration-350 ease-in-out">
+		<!-- Efek animasi Ken Burns di handle oleh Motion.dev via class hero-img -->
+		<img src="/assets/image/HR-PREVIEW.jpg" alt="Studio 01" class="hero-img absolute inset-0 w-full h-full object-cover block origin-center" />
+		
+		<!-- Viewfinder Brackets -->
+		<span class="relative pb-[22px] z-10 before:content-[''] before:absolute before:w-[22px] before:h-[22px] before:border-accent before:border-solid before:-top-[14px] before:-left-[14px] before:border-t-2 before:border-l-2 after:content-[''] after:absolute after:w-[22px] after:h-[22px] after:border-accent after:border-solid after:-top-[14px] after:-right-[14px] after:border-t-2 after:border-r-2">
+			<!-- Sudut Bawah -->
+			<span class="before:content-[''] before:absolute before:w-[22px] before:h-[22px] before:border-accent before:border-solid before:bottom-[14px] before:-left-[14px] before:border-b-2 before:border-l-2 after:content-[''] after:absolute after:w-[22px] after:h-[22px] after:border-accent after:border-solid after:bottom-[14px] after:-right-[14px] after:border-b-2 after:border-r-2"></span>
+		</span>
+	</div>
+</header>
+
+<script>
+	import { animate, stagger } from "motion";
+
+	// Staggered timeline untuk konten Hero (muncul satu per satu dari bawah)
+	animate(
+		".hero-anim",
+		{ y: [60, 0], opacity: [0, 1] },
+		{ duration: 0.8, delay: stagger(0.15), easing: [0.22, 1, 0.36, 1] }
+	);
+
+	// Animasi Ken Burns perlahan pada gambar hero
+	animate(
+		".hero-img",
+		{ scale: [1, 1.06] },
+		{ duration: 8, easing: "easeOut" }
+	);
+</script>

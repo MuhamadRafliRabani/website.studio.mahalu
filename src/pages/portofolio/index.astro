@@ -1,0 +1,249 @@
+---
+import ApertureIcon from "../../components/home-page/ApertureIcon.astro";
+import { works } from "../../data/dummy/portofolio.ts";
+import Layout from "../../layouts/Layout.astro";
+const filters = ["Semua", "Studio 01", "Studio 02"] as const;
+ 
+const totalWorks = works.length;
+const studioCount = new Set(works.map((w) => w.studio)).size;
+const categoryCount = new Set(works.map((w) => w.category)).size;
+---
+
+<Layout title="Portofolio — Mahalu Studio">
+  <div class="sec-block pt-24 md:pt-28 relative overflow-hidden  ">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+   		<div class="container-wrap relative pt-10 md:pt-20 ">
+			<p class="kicker"><i class="ph ph-aperture"></i>Portofolio</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Hasil Produksi yang Pernah Lahir di Studio Ini
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				Sebagian karya klien yang digarap di Studio 01 dan Studio 02 — mulai dari campaign fashion, katalog produk, sampai portrait natural dan cover album musik.
+			</p>
+
+			<div class="flex flex-wrap gap-8">
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-clock-counter-clockwise text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Produksi ditampilkan</p>
+						<p class="font-body text-[14px] text-text font-semibold">{totalWorks} karya</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-buildings text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Ruang produksi</p>
+						<p class="font-body text-[14px] text-text font-semibold">{studioCount} studio aktif</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-squares-four text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Ragam kategori</p>
+						<p class="font-body text-[14px] text-text font-semibold">{categoryCount} jenis produksi</p>
+					</div>
+				</div>
+			</div>
+		</div>
+  </div>
+
+  <main class="container-wrap pt-16! sec-block">
+    <section class="sec-block pt-4! pb-0! " data-animate>
+      <!-- Filter tab -->
+      <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter portofolio berdasarkan studio">
+        {
+          filters.map((label, i) => (
+            <button
+              type="button"
+              class="filter-btn rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors"
+              data-filter={label}
+              aria-pressed={i === 0 ? "true" : "false"}
+            >
+              {label}
+            </button>
+          ))
+        }
+      </div>
+
+      <!-- Grid karya -->
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="workGrid" data-animate-group>
+        {
+          works.map((work) => (
+            <article
+              class="portfolio-card group overflow-hidden rounded-xl border border-border bg-card backdrop-blur-md transition-all duration-350"
+              data-studio={work.studio}
+              data-animate-item
+            >
+              <div class="focus-frame relative aspect-[4/5] overflow-hidden">
+                <img
+                  src={work.image}
+                  alt={work.imageAlt}
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.045]"
+                  loading="lazy"
+                />
+                <span class="fc fc-tl" aria-hidden="true" />
+                <span class="fc fc-tr" aria-hidden="true" />
+                <span class="fc fc-bl" aria-hidden="true" />
+                <span class="fc fc-br" aria-hidden="true" />
+                <span class="absolute left-3 top-3 rounded-full bg-scrim px-3 py-1 text-[11px] font-semibold text-accent backdrop-blur-sm">
+                  {work.studio}
+                </span>
+              </div>
+              <div class="p-5">
+                <p class="text-[11.5px] font-semibold uppercase tracking-[0.06em] text-accent">
+                  {work.category}
+                </p>
+                <h3 class="mt-1.5 font-display text-[16.5px] font-bold text-text">
+                  {work.title}
+                </h3>
+                <p class="mt-2 text-[13.5px] leading-relaxed text-text-muted">
+                  {work.description}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <p
+        id="emptyState"
+        class="hidden py-16 text-center text-[14px] text-text-dim"
+      >
+        Belum ada karya untuk filter ini.
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <!-- <section class="sec-block" data-animate>
+      <div class="rounded-xl border border-border bg-highlight-bg p-10 text-center">
+        <h2 class="font-display text-[24px] font-bold tracking-tight text-text">
+          Mau produksi berikutnya jadi bagian dari portofolio ini?
+        </h2>
+        <p class="mx-auto mt-2 max-w-md text-[14.5px] text-text-muted">
+          Pilih studio yang cocok dengan konsep Anda dan kunci jadwalnya.
+        </p>
+        <a
+          href="/ruangan#tarif"
+          class="mt-6 inline-flex items-center justify-center rounded-md bg-accent px-7 py-3 text-[14.5px] font-semibold text-[#fff8ee] transition-opacity hover:opacity-90"
+        >
+          Lihat Ruangan &amp; Tarif
+        </a>
+      </div>
+    </section> -->
+  </main>
+
+  <style>
+    .filter-btn {
+      border-color: var(--border);
+      color: var(--text-muted);
+      background: transparent;
+    }
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .filter-btn[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff8ee;
+    }
+
+    [data-animate] {
+      opacity: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      [data-animate] {
+        opacity: 1;
+      }
+    }
+  </style>
+  <noscript>
+    <style>
+      [data-animate] {
+        opacity: 1 !important;
+      }
+    </style>
+  </noscript>
+
+  <script>
+    import { animate, inView, stagger } from "motion";
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Reveal-on-scroll — sama pola dengan halaman Ruangan.
+    if (prefersReducedMotion) {
+      document
+        .querySelectorAll<HTMLElement>("[data-animate]")
+        .forEach((el) => {
+          el.style.opacity = "1";
+        });
+    } else {
+      inView(
+        "[data-animate]",
+        (element) => {
+          animate(
+            element,
+            { opacity: [0, 1], transform: ["translateY(24px)", "translateY(0)"] },
+            { duration: 0.6, easing: [0.22, 1, 0.36, 1] },
+          );
+
+          const group = element.querySelectorAll<HTMLElement>(
+            "[data-animate-group] [data-animate-item]",
+          );
+          if (group.length) {
+            animate(
+              group,
+              { opacity: [0, 1], transform: ["translateY(14px)", "translateY(0)"] },
+              { duration: 0.45, delay: stagger(0.06, { startDelay: 0.15 }), easing: [0.22, 1, 0.36, 1] },
+            );
+          }
+        },
+        { margin: "-10% 0px -10% 0px" },
+      );
+    }
+
+    // Filter tab — toggle kartu berdasarkan studio, dengan fade pendek biar
+    // pergantiannya nggak "loncat" mendadak.
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>(
+      "[data-filter]",
+    );
+    const cards = document.querySelectorAll<HTMLElement>(
+      "#workGrid [data-studio]",
+    );
+    const emptyState = document.getElementById("emptyState");
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const value = btn.dataset.filter;
+        filterButtons.forEach((b) =>
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false"),
+        );
+
+        let visibleCount = 0;
+        cards.forEach((card) => {
+          const matches = value === "Semua" || card.dataset.studio === value;
+          if (matches) visibleCount++;
+
+          if (prefersReducedMotion) {
+            card.style.display = matches ? "" : "none";
+            return;
+          }
+
+          if (matches && card.style.display === "none") {
+            card.style.display = "";
+            animate(card, { opacity: [0, 1] }, { duration: 0.3 });
+          } else if (!matches) {
+            animate(card, { opacity: [1, 0] }, { duration: 0.2 }).then(() => {
+              card.style.display = "none";
+            });
+          }
+        });
+
+        emptyState?.classList.toggle("hidden", visibleCount !== 0);
+      });
+    });
+  </script>
+</Layout>

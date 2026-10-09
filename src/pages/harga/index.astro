@@ -1,0 +1,256 @@
+---
+// Adjust this import path if your layouts folder differs
+import { rooms,type Room, type RoomAddon } from "../../data/dummy/rooms.ts";
+import Layout from "../../layouts/Layout.astro";
+
+const formatRupiah = (n: number) => "Rp " + n.toLocaleString("id-ID");
+const perHour = (price: number, hours: number) => formatRupiah(Math.round(price / hours));
+
+// Dedupe addons across rooms by name, and track which rooms offer each one.
+const addonCatalog = new Map<string, { addon: RoomAddon; rooms: string[] }>();
+rooms.forEach((room) => {
+	room.addons.forEach((addon) => {
+		const entry = addonCatalog.get(addon.name);
+		if (entry) {
+			entry.rooms.push(room.shortName);
+		} else {
+			addonCatalog.set(addon.name, { addon, rooms: [room.shortName] });
+		}
+	});
+});
+const uniqueAddons = Array.from(addonCatalog.values());
+
+const cheapestFirstHour = Math.min(...rooms.map((r) => r.pricing[0].price));
+---
+
+<Layout title="Harga — Mahalu Studio">
+	<!-- Hero -->
+	<section class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg"></div>
+		<div class="grain"></div>
+		<div class="container-wrap relative pt-10 md:pt-20">
+			<p class="kicker"><i class="ph ph-tag"></i>Transparansi Tarif</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Semua Biaya, Jelas Sejak Awal
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed">
+				Mulai dari {formatRupiah(cheapestFirstHour)}/jam. Tidak ada biaya kebersihan atau administrasi tersembunyi — yang Anda lihat di bawah ini yang Anda bayar.
+			</p>
+		</div>
+	</section>
+
+	<!-- Quick comparison cards -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-lightning"></i>Ringkasan Cepat</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Pilih Ruangan</h2>
+			<div class="grid md:grid-cols-2 gap-6">
+				{rooms.map((room) => (
+					<a href={`/ruangan/${room.slug}`} class="card-hover focus-frame group block rounded-2xl border border-border bg-card overflow-hidden">
+						<span class="fc fc-tl"></span><span class="fc fc-tr"></span><span class="fc fc-bl"></span><span class="fc fc-br"></span>
+						<div class="aspect-[16/9] bg-bg-soft overflow-hidden">
+							<img src={room.heroImage} alt={room.name} class="w-full h-full object-cover" loading="lazy" />
+						</div>
+						<div class="p-6">
+							<h3 class="font-display text-xl text-text font-semibold mb-1">{room.name}</h3>
+							<p class="font-body text-[13.5px] text-text-muted mb-4">{room.tagline}</p>
+							<div class="flex items-center justify-between border-t border-border pt-4">
+								<span class="font-title text-[13px] text-text-dim">
+									Mulai <span class="font-display text-accent text-base font-semibold">{formatRupiah(room.pricing[0].price)}</span>/jam
+								</span>
+								<span class="font-title text-[13px] text-accent font-semibold inline-flex items-center gap-1.5">
+									Detail & Booking
+									<i class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+								</span>
+							</div>
+						</div>
+					</a>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Full pricing tables -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-table"></i>Tarif Sewa Ruangan</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-2">Tabel Tarif Lengkap</h2>
+			<p class="font-body text-[14px] text-text-muted max-w-xl mb-8">
+				Makin lama durasi, makin murah tarif per jamnya — kolom "Setara /jam" di bawah membandingkan efisiensinya.
+			</p>
+
+			<div class="grid md:grid-cols-2 gap-8">
+				{rooms.map((room) => (
+					<div>
+						<h3 class="font-title text-[13.5px] text-text font-semibold mb-3 flex items-center gap-2">
+							<span class="w-2 h-2 rounded-full bg-accent"></span> {room.shortName}
+						</h3>
+						<div class="rounded-2xl border border-border bg-card overflow-hidden">
+							<table class="w-full text-left border-collapse">
+								<thead>
+									<tr class="border-b border-border">
+										<th class="font-title text-[11px] uppercase tracking-wider text-text-dim font-semibold px-5 py-3">Durasi</th>
+										<th class="font-title text-[11px] uppercase tracking-wider text-text-dim font-semibold px-5 py-3">Harga</th>
+										<th class="font-title text-[11px] uppercase tracking-wider text-text-dim font-semibold px-5 py-3">Setara /jam</th>
+									</tr>
+								</thead>
+								<tbody>
+									{room.pricing.map((tier, i) => (
+										<tr class={i !== room.pricing.length - 1 ? "border-b border-border" : ""}>
+											<td class="font-body text-[13.5px] text-text px-5 py-3">{tier.duration}</td>
+											<td class="font-display text-[14px] text-accent font-semibold px-5 py-3">{formatRupiah(tier.price)}</td>
+											<td class="font-body text-[12.5px] text-text-dim px-5 py-3">{perHour(tier.price, tier.hours)}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+						<p class="font-body text-[12px] text-text-dim mt-3">{room.overtimeNote}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Addon catalog -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-sparkle"></i>Add-on Jasa Kreatif</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-2">Layanan Tambahan</h2>
+			<p class="font-body text-[14px] text-text-muted max-w-xl mb-8">
+				Dua jenis tarif add-on: <strong class="text-text">mengikuti durasi</strong> sewa ruangan, atau <strong class="text-text">tetap per booking</strong> berapa pun durasinya.
+			</p>
+
+			<div class="grid md:grid-cols-2 gap-6">
+				{uniqueAddons.map(({ addon, rooms: availableIn }) => (
+					<div class="rounded-2xl border border-border bg-card p-6">
+						<div class="flex items-start justify-between gap-3 mb-1">
+							<h3 class="font-title text-[14.5px] text-text font-semibold">{addon.name}</h3>
+							<span class="shrink-0 font-title text-[10.5px] uppercase tracking-wide text-accent bg-accent-soft rounded-full px-2.5 py-1">
+								{addon.type === "tiered" ? "Ikut Durasi" : "Flat"}
+							</span>
+						</div>
+						<p class="font-body text-[12px] text-text-dim mb-4">Tersedia untuk: {availableIn.join(", ")}</p>
+
+						{addon.type === "tiered" ? (
+							<div class="grid grid-cols-2 gap-2">
+								{addon.pricing.map((tier) => (
+									<div class="rounded-lg bg-highlight-bg px-3 py-2 flex items-center justify-between">
+										<span class="font-body text-[12px] text-text-dim">{tier.duration}</span>
+										<span class="font-body text-[12.5px] text-text font-medium">{formatRupiah(tier.price)}</span>
+									</div>
+								))}
+							</div>
+						) : (
+							<div class="rounded-lg bg-highlight-bg px-4 py-3 flex items-center justify-between">
+								<span class="font-body text-[12.5px] text-text-dim">{addon.unit}</span>
+								<span class="font-display text-[16px] text-accent font-semibold">{formatRupiah(addon.price)}</span>
+							</div>
+						)}
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- How pricing works -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-calculator"></i>Cara Kerja Tarif</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Tiga Hal yang Perlu Dipahami</h2>
+			<div class="grid md:grid-cols-3 gap-5">
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">01</span>
+					<h3 class="font-title text-[14.5px] text-text font-semibold mb-2">Durasi Menentukan Harga Dasar</h3>
+					<p class="font-body text-[13.5px] text-text-muted leading-relaxed">
+						Pilih durasi sewa (1/3/6/8 jam) — semakin panjang durasi, semakin hemat tarif per jamnya. Lewat dari durasi yang dipesan, kelebihan waktu dihitung overtime mengikuti tarif 1 jam.
+					</p>
+				</div>
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">02</span>
+					<h3 class="font-title text-[14.5px] text-text font-semibold mb-2">Add-on "Ikut Durasi" Naik Bersama Jam Sewa</h3>
+					<p class="font-body text-[13.5px] text-text-muted leading-relaxed">
+						Color grading foto & video harganya menyesuaikan durasi ruangan yang dipesan — makin lama sesi, makin banyak materi yang di-grading, makin tinggi tarifnya.
+					</p>
+				</div>
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">03</span>
+					<h3 class="font-title text-[14.5px] text-text font-semibold mb-2">Add-on "Flat" Tetap, Berapa Pun Durasinya</h3>
+					<p class="font-body text-[13.5px] text-text-muted leading-relaxed">
+						MUA dan fashion stylist tarifnya sudah tetap per booking — mau sewa 1 jam atau 8 jam, biayanya sama karena dihitung per kedatangan, bukan per jam.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Payment & policy FAQ -->
+	<section class="sec-block" id="faq">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-question"></i>Pertanyaan Seputar Biaya</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Kebijakan Pembayaran</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 ">
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah perlu bayar DP untuk booking?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Ya, DP 50% dari total estimasi mengunci slot Anda. Sisanya dibayar di hari-H sebelum sesi dimulai.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Bagaimana kalau ingin membatalkan booking?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Pembatalan H-3 sebelum jadwal mengembalikan DP penuh. Pembatalan di bawah H-3, DP dapat dialihkan ke jadwal lain dalam 30 hari.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah harga add-on bisa berubah setelah booking?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Tidak. Tarif yang disepakati saat booking terkunci — perubahan hanya terjadi jika Anda sendiri menambah durasi atau add-on di hari-H.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Metode pembayaran apa saja yang diterima?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Transfer bank dan e-wallet. Detail rekening dikirim setelah konfirmasi booking via WhatsApp.
+					</p>
+				</details>
+			</div>
+		</div>
+	</section>
+
+	<!-- Bottom CTA -->
+	<!-- <section class="sec-block">
+		<div class="container-wrap">
+			<div class="bg-accent-soft border border-border rounded-2xl px-8 py-12 md:px-14 md:py-14 text-center">
+				<h2 class="font-display text-2xl md:text-3xl text-text font-semibold mb-3">Sudah Tahu Ruangan Mana yang Cocok?</h2>
+				<p class="font-body text-text-muted max-w-md mx-auto mb-7 text-[14.5px]">
+					Buka halaman ruangan untuk pilih durasi, add-on, dan hitung estimasi biaya lengkap.
+				</p>
+				<div class="flex flex-wrap gap-3 justify-center">
+					<a href="/ruangan" class="inline-flex items-center gap-2 bg-accent text-bg font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full">
+						Lihat Ruangan
+					</a>
+					<a href="#faq" class="inline-flex items-center gap-2 border border-border text-text font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full">
+						Baca FAQ
+					</a>
+				</div>
+			</div>
+		</div>
+	</section> -->
+</Layout>

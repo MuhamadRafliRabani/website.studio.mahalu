@@ -1,0 +1,187 @@
+---
+// File ini diletakkan di: src/pages/blog/[slug].astro
+import {  getCategoryLabel, getCategoryIcon, getRelatedPosts, posts } from "../../data/dummy/blog.ts";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const related = getRelatedPosts(post);
+const headings = post.content.filter((s) => s.heading).map((s) => s.heading as string);
+
+const slugify = (text: string) =>
+	text
+		.toLowerCase()
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/(^-|-$)/g, "");
+---
+
+<Layout title={`${post.title} — Mahalu Studio`}>
+	<!-- Breadcrumb -->
+	<section class="pt-24 md:pt-28 pb-2">
+		<div class="container-wrap">
+			<nav class="font-body text-[13px] text-text-dim flex items-center gap-2 flex-wrap">
+				<a href="/" class="hover:text-accent transition-colors">Home</a>
+				<i class="ph ph-caret-right text-[10px]"></i>
+				<a href="/blog" class="hover:text-accent transition-colors">Blog</a>
+				<i class="ph ph-caret-right text-[10px]"></i>
+				<span class="text-text">{getCategoryLabel(post.category)}</span>
+			</nav>
+		</div>
+	</section>
+
+	<!-- Header -->
+	<section class="sec-block pt-6">
+		<div class="container-wrap max-w-3xl">
+			<span class="w-fit font-title text-[11px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 mb-4 inline-flex items-center gap-1.5">
+				<i class={`ph ph-${getCategoryIcon(post.category)} text-[11px]`}></i>
+				{getCategoryLabel(post.category)}
+			</span>
+			<h1 class="font-display text-[clamp(1.9rem,4vw,2.8rem)] font-semibold text-text leading-[1.15] mb-5">
+				{post.title}
+			</h1>
+			<div class="flex items-center gap-4 flex-wrap text-[13px] text-text-dim font-body pb-6 border-b border-border">
+				<span class="inline-flex items-center gap-1.5"><i class="ph ph-user-circle"></i>{post.author}</span>
+				<span class="inline-flex items-center gap-1.5"><i class="ph ph-calendar"></i>{post.date}</span>
+				<span class="inline-flex items-center gap-1.5"><i class="ph ph-clock"></i>{post.readTime}</span>
+				<button
+					type="button"
+					id="share-btn"
+					class="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[12.5px] font-title font-semibold text-text-muted hover:text-text hover:border-accent transition-colors duration-200"
+				>
+					<i class="ph ph-link"></i> Salin Tautan
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Cover -->
+	<section class="pb-2">
+		<div class="container-wrap max-w-4xl">
+			<div class="focus-frame rounded-2xl border border-border overflow-hidden bg-bg-soft aspect-[16/9]">
+				<span class="fc fc-tl"></span><span class="fc fc-tr"></span><span class="fc fc-bl"></span><span class="fc fc-br"></span>
+				<img src={post.cover} alt={post.alt} class="w-full h-full object-cover" loading="eager" />
+			</div>
+		</div>
+	</section>
+
+	<!-- Table of contents (only when the article has subheadings) -->
+	{headings.length > 1 && (
+		<section class="sec-block pt-8 pb-4">
+			<div class="container-wrap max-w-3xl">
+				<div class="rounded-xl border border-border bg-card p-5">
+					<p class="font-title text-[11px] uppercase tracking-wider text-text-dim mb-3 flex items-center gap-1.5">
+						<i class="ph ph-list-bullets text-accent"></i> Isi Artikel
+					</p>
+					<ol class="flex flex-col gap-1.5">
+						{headings.map((h, i) => (
+							<li>
+								<a href={`#${slugify(h)}`} class="font-body text-[13.5px] text-text-muted hover:text-accent transition-colors duration-150">
+									{i + 1}. {h}
+								</a>
+							</li>
+						))}
+					</ol>
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Article body -->
+	<section class="sec-block pt-4">
+		<div class="container-wrap max-w-3xl">
+			<article class="flex flex-col gap-5">
+				{post.content.map((section) => (
+					<div>
+						{section.heading && (
+							<h2 id={slugify(section.heading)} class="font-display text-xl md:text-2xl text-text font-semibold mt-6 mb-3 scroll-mt-28">
+								{section.heading}
+							</h2>
+						)}
+						{section.paragraphs.map((p) => (
+							<p class="font-body text-[15.5px] text-text-muted leading-relaxed mb-4">{p}</p>
+						))}
+					</div>
+				))}
+			</article>
+
+			<!-- Inline CTA -->
+			<div class="mt-10 rounded-2xl border border-border bg-accent-soft p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 justify-between">
+				<div>
+					<h3 class="font-display text-lg text-text font-semibold mb-1.5">Siap Coba Sendiri?</h3>
+					<p class="font-body text-[13.5px] text-text-muted">Cek ruangan yang cocok dengan konsep Anda dan kunci jadwalnya.</p>
+				</div>
+				<a href="/ruangan#tarif" class="shrink-0 inline-flex items-center justify-center gap-2 bg-accent text-bg font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full">
+					Lihat Ruangan & Tarif
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Related posts -->
+	{related.length > 0 && (
+		<section class="sec-block">
+			<div class="container-wrap">
+				<p class="kicker"><i class="ph ph-stack"></i>Artikel Terkait</p>
+				<h2 class="font-display text-2xl text-text font-semibold mb-6">Baca Juga</h2>
+				<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+					{related.map((r) => (
+						<a href={`/blog/${r.slug}`} class="card-hover rounded-2xl border border-border bg-card overflow-hidden no-underline flex flex-col">
+							<div class="aspect-[16/10] bg-bg-soft overflow-hidden">
+								<img src={r.cover} alt={r.alt} class="w-full h-full object-cover" loading="lazy" />
+							</div>
+							<div class="p-5 flex flex-col flex-1">
+								<span class="w-fit font-title text-[10px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 mb-3 inline-flex items-center gap-1.5">
+									<i class={`ph ph-${getCategoryIcon(r.category)} text-[10.5px]`}></i>
+									{getCategoryLabel(r.category)}
+								</span>
+								<h3 class="font-title text-[15px] text-text font-semibold mb-2 leading-snug">{r.title}</h3>
+								<p class="font-body text-[13px] text-text-muted leading-relaxed flex-1">{r.excerpt}</p>
+							</div>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Back to blog -->
+	<section class="pb-16">
+		<div class="container-wrap max-w-3xl">
+			<a href="/blog" class="inline-flex items-center gap-2 font-title text-[13.5px] font-semibold text-text-muted hover:text-accent transition-colors duration-200">
+				<i class="ph ph-arrow-left"></i> Kembali ke Semua Artikel
+			</a>
+		</div>
+	</section>
+
+	<script>
+		const shareBtn = document.getElementById("share-btn");
+		shareBtn?.addEventListener("click", async () => {
+			try {
+				await navigator.clipboard.writeText(window.location.href);
+				const original = shareBtn.innerHTML;
+				shareBtn.innerHTML = '<i class="ph ph-check"></i> Tersalin';
+				setTimeout(() => {
+					shareBtn.innerHTML = original;
+				}, 1800);
+			} catch {
+				// clipboard API unavailable — fail silently, link is still visible in the address bar
+			}
+		});
+	</script>
+
+	<script>
+		import { animate, inView } from "motion";
+
+		inView(".sec-block", ({ target }) => {
+			animate(target, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, easing: "ease-out" });
+		});
+	</script>
+</Layout>

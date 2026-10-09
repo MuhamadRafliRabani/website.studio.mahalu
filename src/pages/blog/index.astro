@@ -1,0 +1,377 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+// File ini asumsinya diletakkan di: src/pages/blog/index.astro
+// (sama kedalaman folder dengan src/pages/portofolio/index.astro & harga/index.astro)
+
+interface Category {
+	key: string;
+	label: string;
+	icon: string;
+}
+
+interface Post {
+	slug: string;
+	title: string;
+	excerpt: string;
+	category: string;
+	author: string;
+	date: string; // format: "12 Sep 2026"
+	readTime: string; // format: "5 menit baca"
+	cover: string;
+	alt: string;
+	featured?: boolean;
+}
+
+// TODO(Bani): ganti seluruh data di bawah dengan artikel asli sebelum deploy.
+const categories: Category[] = [
+	{ key: "all", label: "Semua", icon: "squares-four" },
+	{ key: "tips", label: "Tips Produksi", icon: "lightbulb" },
+	{ key: "behind-the-scenes", label: "Behind the Scenes", icon: "camera" },
+	{ key: "studio-update", label: "Update Studio", icon: "megaphone" },
+	{ key: "klien", label: "Cerita Klien", icon: "users-three" },
+];
+
+const posts: Post[] = [
+	{
+		slug: "cara-memilih-studio-foto-yang-tepat",
+		title: "Cara Memilih Studio Foto yang Tepat untuk Campaign Anda",
+		excerpt: "Sebelum booking, ada beberapa hal teknis dan non-teknis yang sering terlewat — dari karakter cahaya sampai kesiapan add-on kreatif. Berikut panduan singkatnya.",
+		category: "tips",
+		author: "Tim Mahalu Studio",
+		date: "2 Sep 2026",
+		readTime: "6 menit baca",
+		cover: "/assets/image/BLOG/BLG-ZERO.jpg",
+		alt: "Suasana pemilihan studio foto untuk campaign",
+		featured: true,
+	},
+	{
+		slug: "di-balik-layar-produksi-katalog-produk",
+		title: "Di Balik Layar: Produksi Katalog Produk Skala Besar di Studio 01",
+		excerpt: "Bagaimana tim kami menata white cyclorama dan lighting untuk katalog produk lebih dari 200 item dalam satu hari produksi.",
+		category: "behind-the-scenes",
+		author: "Nama Lead Photographer",
+		date: "28 Agu 2026",
+		readTime: "4 menit baca",
+		cover: "/assets/image/BLOG/BLG-ONE.png",
+		alt: "Proses produksi katalog produk di Studio 01",
+	},
+	{
+		slug: "perbedaan-studio-01-dan-studio-02",
+		title: "Studio 01 vs Studio 02: Mana yang Cocok untuk Konsep Anda?",
+		excerpt: "White cyclorama dengan kontrol cahaya penuh, atau nuansa raw dan hangat dengan cahaya alami? Kenali perbedaan karakter kedua ruang ini.",
+		category: "tips",
+		author: "Tim Mahalu Studio",
+		date: "20 Agu 2026",
+		readTime: "5 menit baca",
+		cover: "/assets/image/BLOG/BLG-TWO.jpg",
+		alt: "Perbandingan suasana Studio 01 dan Studio 02",
+	},
+	{
+		slug: "color-grading-add-on-yang-sering-ditanyakan",
+		title: "Color Grading sebagai Add-on: Yang Sering Ditanyakan Klien",
+		excerpt: "Kapan sebaiknya menambahkan color grading, dan bagaimana tarifnya menyesuaikan durasi sewa ruangan? Kami rangkum pertanyaan yang paling sering masuk.",
+		category: "tips",
+		author: "Nama Videographer",
+		date: "14 Agu 2026",
+		readTime: "3 menit baca",
+		cover: "/assets/image/BLOG/BLG-TRE.webp",
+		alt: "Proses color grading video di studio",
+	},
+	{
+		slug: "cerita-klien-campaign-fashion-lokal",
+		title: "Cerita Klien: Campaign Fashion Lokal yang Diproduksi dalam Satu Hari",
+		excerpt: "Bagaimana sebuah brand fashion lokal memanfaatkan Studio 01 dan add-on stylist untuk menyelesaikan seluruh campaign musim mereka hanya dalam satu sesi.",
+		category: "klien",
+		author: "Tim Mahalu Studio",
+		date: "5 Agu 2026",
+		readTime: "7 menit baca",
+		cover: "/assets/image/BLOG/BLG-FOUR.jpg",
+		alt: "Sesi campaign fashion lokal di Mahalu Studio",
+	},
+	{
+		slug: "jam-operasional-baru-mahalu-studio",
+		title: "Update: Penyesuaian Jam Operasional Mahalu Studio",
+		excerpt: "Mulai bulan ini kami memperluas jam operasional untuk mengakomodasi lebih banyak jadwal produksi malam hari. Simak detail lengkapnya.",
+		category: "studio-update",
+		author: "Studio Manager",
+		date: "30 Jul 2026",
+		readTime: "2 menit baca",
+		cover: "/assets/image/BLOG/BLG-FIVE.jpg",
+		alt: "Suasana studio pada malam hari",
+	},
+	{
+		slug: "tips-menyiapkan-moodboard-sebelum-sesi",
+		title: "5 Tips Menyiapkan Moodboard Sebelum Sesi Foto",
+		excerpt: "Moodboard yang jelas mempercepat komunikasi dengan tim kreatif kami di hari-H. Berikut cara menyusunnya supaya efektif.",
+		category: "tips",
+		author: "Nama Fashion Stylist",
+		date: "22 Jul 2026",
+		readTime: "4 menit baca",
+		cover: "/assets/image/BLOG/BLG-SIX.jpg",
+		alt: "Contoh moodboard produksi foto",
+	},
+	{
+		slug: "di-balik-layar-cover-album-musik",
+		title: "Di Balik Layar: Produksi Cover Album Musik di Studio 02",
+		excerpt: "Memanfaatkan cahaya alami Studio 02 untuk menghasilkan nuansa raw dan intim pada sesi pemotretan cover album seorang musisi indie.",
+		category: "behind-the-scenes",
+		author: "Nama Photographer",
+		date: "10 Jul 2026",
+		readTime: "5 menit baca",
+		cover: "/assets/image/BLOG/BLG-SEVEN.jpg",
+		alt: "Sesi pemotretan cover album musik di Studio 02",
+	},
+];
+
+const featuredPost = posts.find((p) => p.featured) ?? posts[0];
+const regularPosts = posts.filter((p) => p.slug !== featuredPost.slug);
+
+const categoryLabel = (key: string) => categories.find((c) => c.key === key)?.label ?? key;
+const categoryIcon = (key: string) => categories.find((c) => c.key === key)?.icon ?? "tag";
+---
+
+<Layout title="Blog — Mahalu Studio">
+	<!-- Hero -->
+	<div class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg" aria-hidden="true"></div>
+		<div class="grain" aria-hidden="true"></div>
+		<div class="container-wrap relative pt-10 md:pt-20" data-animate>
+			<p class="kicker"><i class="ph ph-article" aria-hidden="true"></i>Blog</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Cerita, Tips, dan Update dari Mahalu Studio
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				Dari behind the scenes produksi, tips memilih ruangan yang tepat, sampai cerita klien — kumpulan artikel yang membantu Anda menyiapkan sesi produksi berikutnya.
+			</p>
+
+			<div class="flex flex-wrap gap-8">
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-newspaper text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Total artikel</p>
+						<p class="font-body text-[14px] text-text font-semibold">{posts.length} tulisan</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-squares-four text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Kategori</p>
+						<p class="font-body text-[14px] text-text font-semibold">{categories.length - 1} topik</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-arrows-clockwise text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Update</p>
+						<p class="font-body text-[14px] text-text font-semibold">Rutin tiap bulan</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<main class="container-wrap pt-16! pb-0! sec-block">
+		<!-- Artikel unggulan -->
+		<section class="sec-block pt-4!" data-animate>
+			<p class="kicker"><i class="ph ph-star" aria-hidden="true"></i>Artikel Unggulan</p>
+			<a
+				href={`/blog/${featuredPost.slug}`}
+				class="card-hover focus-frame group block rounded-2xl border border-border bg-card overflow-hidden no-underline"
+			>
+				<span class="fc fc-tl" aria-hidden="true"></span><span class="fc fc-tr" aria-hidden="true"></span><span class="fc fc-bl" aria-hidden="true"></span><span class="fc fc-br" aria-hidden="true"></span>
+				<div class="grid md:grid-cols-[1.1fr_1fr]">
+					<div class="aspect-[16/10] md:aspect-auto bg-bg-soft overflow-hidden">
+						<img src={featuredPost.cover} alt={featuredPost.alt} class="w-full h-full object-cover" loading="eager" />
+					</div>
+					<div class="p-6 md:p-8 flex flex-col justify-center">
+						<span class="w-fit font-title text-[10.5px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 mb-4 inline-flex items-center gap-1.5">
+							<i class={`ph ph-${categoryIcon(featuredPost.category)} text-[11px]`} aria-hidden="true"></i>
+							{categoryLabel(featuredPost.category)}
+						</span>
+						<h2 class="font-display text-xl md:text-2xl text-text font-semibold mb-3 leading-snug">{featuredPost.title}</h2>
+						<p class="font-body text-[13.5px] text-text-muted leading-relaxed mb-5">{featuredPost.excerpt}</p>
+						<div class="flex items-center gap-4 text-[12px] text-text-dim font-body">
+							<span class="inline-flex items-center gap-1.5"><i class="ph ph-user-circle" aria-hidden="true"></i>{featuredPost.author}</span>
+							<span class="inline-flex items-center gap-1.5"><i class="ph ph-calendar" aria-hidden="true"></i>{featuredPost.date}</span>
+							<span class="inline-flex items-center gap-1.5"><i class="ph ph-clock" aria-hidden="true"></i>{featuredPost.readTime}</span>
+						</div>
+						<span class="font-title text-[13px] text-accent font-semibold inline-flex items-center gap-1.5 mt-5">
+							Baca Selengkapnya
+							<i class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
+						</span>
+					</div>
+				</div>
+			</a>
+		</section>
+
+		<!-- Filter kategori (client-side, tanpa reload halaman) -->
+		<section class="sec-block" data-animate>
+			<div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+				<div>
+					<p class="kicker"><i class="ph ph-funnel" aria-hidden="true"></i>Jelajahi Artikel</p>
+					<h2 class="font-display text-2xl text-text font-semibold">Semua Tulisan</h2>
+				</div>
+			</div>
+
+			<div class="flex flex-wrap gap-2.5 mb-10" id="category-filter" role="tablist" aria-label="Filter kategori artikel">
+				{categories.map((cat, i) => (
+					<button
+						type="button"
+						role="tab"
+						aria-selected={i === 0 ? "true" : "false"}
+						data-category={cat.key}
+						class:list={[
+							"category-btn inline-flex items-center gap-2 rounded-full border px-4 py-2 font-title text-[13px] font-medium transition-colors duration-200",
+							i === 0
+								? "border-accent bg-accent-soft text-text"
+								: "border-border bg-card text-text-muted hover:bg-highlight-bg",
+						]}
+					>
+						<i class={`ph ph-${cat.icon} text-[14px]`} aria-hidden="true"></i>
+						{cat.label}
+					</button>
+				))}
+			</div>
+
+			<!-- Grid artikel -->
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="post-grid" data-animate-group>
+				{regularPosts.map((post) => (
+					<a
+						href={`/blog/${post.slug}`}
+						class="post-card card-hover rounded-2xl border border-border bg-card overflow-hidden no-underline flex flex-col"
+						data-category={post.category}
+						data-animate-item
+					>
+						<div class="aspect-[16/10] bg-bg-soft overflow-hidden">
+							<img src={post.cover} alt={post.alt} class="w-full h-full object-cover" loading="lazy" />
+						</div>
+						<div class="p-5 flex flex-col flex-1">
+							<span class="w-fit font-title text-[10px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 mb-3 inline-flex items-center gap-1.5">
+								<i class={`ph ph-${categoryIcon(post.category)} text-[10.5px]`} aria-hidden="true"></i>
+								{categoryLabel(post.category)}
+							</span>
+							<h3 class="font-title text-[15px] text-text font-semibold mb-2 leading-snug">{post.title}</h3>
+							<p class="font-body text-[13px] text-text-muted leading-relaxed mb-4 flex-1">{post.excerpt}</p>
+							<div class="flex items-center justify-between text-[11.5px] text-text-dim font-body border-t border-border pt-3">
+								<span class="inline-flex items-center gap-1.5"><i class="ph ph-calendar" aria-hidden="true"></i>{post.date}</span>
+								<span class="inline-flex items-center gap-1.5"><i class="ph ph-clock" aria-hidden="true"></i>{post.readTime}</span>
+							</div>
+						</div>
+					</a>
+				))}
+			</div>
+
+			<!-- Empty state kalau filter tidak menemukan artikel -->
+			<div id="empty-state" class="hidden text-center py-16">
+				<i class="ph ph-magnifying-glass text-text-dim text-3xl mb-3" aria-hidden="true"></i>
+				<p class="font-body text-[14px] text-text-muted">Belum ada artikel di kategori ini.</p>
+			</div>
+		</section>
+
+		<!-- Newsletter -->
+		<section class="sec-block" data-animate>
+			<div class="rounded-2xl border border-border bg-accent-soft p-8 md:p-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+				<div>
+					<p class="kicker"><i class="ph ph-envelope-simple-open" aria-hidden="true"></i>Newsletter</p>
+					<h2 class="font-display text-xl md:text-2xl text-text font-semibold mb-2">Jangan Lewatkan Artikel Terbaru</h2>
+					<p class="font-body text-[14px] text-text-muted leading-relaxed max-w-md">
+						Dapatkan tips produksi dan update studio langsung lewat WhatsApp, tanpa spam.
+					</p>
+				</div>
+				<a
+					href="/#kontak"
+					class="inline-flex items-center justify-center gap-2 bg-accent text-[#fff8ee] font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full no-underline shrink-0 transition-transform hover:-translate-y-[1px]"
+				>
+					Hubungi Kami
+					<i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+				</a>
+			</div>
+		</section>
+	</main>
+
+	<noscript>
+		<style>
+			[data-animate] {
+				opacity: 1 !important;
+			}
+		</style>
+	</noscript>
+
+	<script>
+		import { animate, inView, stagger } from "motion";
+
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		// Reveal-on-scroll — pola yang sama dengan halaman About, Ruangan, & Tim.
+		if (prefersReducedMotion) {
+			document
+				.querySelectorAll<HTMLElement>("[data-animate]")
+				.forEach((el) => {
+					el.style.opacity = "1";
+				});
+		} else {
+			document.querySelectorAll<HTMLElement>("[data-animate]").forEach((el) => {
+				el.style.opacity = "0";
+			});
+
+			inView(
+				"[data-animate]",
+				(element) => {
+					animate(
+						element,
+						{ opacity: [0, 1], transform: ["translateY(24px)", "translateY(0)"] },
+						{ duration: 0.6, easing: [0.22, 1, 0.36, 1] },
+					);
+
+					const group = element.querySelectorAll<HTMLElement>(
+						"[data-animate-group] [data-animate-item]",
+					);
+					if (group.length) {
+						animate(
+							group,
+							{ opacity: [0, 1], transform: ["translateY(14px)", "translateY(0)"] },
+							{ duration: 0.45, delay: stagger(0.05, { startDelay: 0.15 }), easing: [0.22, 1, 0.36, 1] },
+						);
+					}
+				},
+				{ margin: "-10% 0px -10% 0px" },
+			);
+		}
+	</script>
+
+	<!-- Filter kategori — murni client-side, tidak perlu reload/query param -->
+	<script>
+		const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(".category-btn"));
+		const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>(".post-card"));
+		const emptyState = document.getElementById("empty-state");
+
+		function applyFilter(category: string) {
+			let visibleCount = 0;
+			cards.forEach((card) => {
+				const match = category === "all" || card.dataset.category === category;
+				card.classList.toggle("hidden", !match);
+				if (match) visibleCount++;
+			});
+			emptyState?.classList.toggle("hidden", visibleCount !== 0);
+		}
+
+		buttons.forEach((btn) => {
+			btn.addEventListener("click", () => {
+				buttons.forEach((b) => {
+					const active = b === btn;
+					b.setAttribute("aria-selected", String(active));
+					b.classList.toggle("border-accent", active);
+					b.classList.toggle("bg-accent-soft", active);
+					b.classList.toggle("text-text", active);
+					b.classList.toggle("border-border", !active);
+					b.classList.toggle("bg-card", !active);
+					b.classList.toggle("text-text-muted", !active);
+				});
+				applyFilter(btn.dataset.category ?? "all");
+			});
+		});
+	</script>
+</Layout>

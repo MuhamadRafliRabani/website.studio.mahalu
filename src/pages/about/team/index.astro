@@ -1,0 +1,365 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+// File ini asumsinya diletakkan di: src/pages/about/team.astro
+// (sama kedalaman folder dengan src/pages/about/index.astro)
+
+interface TeamMember {
+	name: string;
+	role: string;
+	department: string;
+	photo: string;
+	alt: string;
+	bio: string;
+	specialties: string[];
+	instagram?: string;
+	email?: string;
+}
+
+interface Department {
+	key: string;
+	label: string;
+	icon: string;
+	desc: string;
+}
+
+interface WorkValue {
+	icon: string;
+	title: string;
+	desc: string;
+}
+
+// TODO(Bani): ganti seluruh data di bawah dengan data tim asli sebelum deploy.
+// Struktur & jumlah anggota per departemen bebas disesuaikan.
+const departments: Department[] = [
+	{ key: "creative", label: "Creative & Produksi", icon: "camera", desc: "Yang memegang kamera, cahaya, dan arahan visual di setiap sesi." },
+	{ key: "styling", label: "Styling & Beauty", icon: "sparkle", desc: "Yang memastikan talent dan konsep tampil maksimal di depan kamera." },
+	{ key: "ops", label: "Operasional Studio", icon: "buildings", desc: "Yang menjaga ruang, jadwal, dan komunikasi klien berjalan lancar." },
+];
+
+const teamMembers: TeamMember[] = [
+	{
+		name: "Tomy Budi Hotomo",
+		role: "Lead Photographer",
+		department: "creative",
+		photo: "/assets/image/ABOUT/ABT-LD.jpg",
+		alt: "Foto Lead Photographer Mahalu Studio",
+		bio: "Memimpin arahan visual untuk produksi fashion dan katalog produk, dari perencanaan lighting sampai final selection.",
+		specialties: ["Fashion", "Katalog Produk", "Lighting Setup"],
+		instagram: "https://instagram.com/",
+		email: "hello@mahalustudio.com",
+	},
+	{
+		name: "Syafira Salsabila",
+		role: "Lead Videographer",
+		department: "creative",
+		photo: "/assets/image/ABOUT/ABT-VGR.jpg",
+		alt: "Foto Lead Videographer Mahalu Studio",
+		bio: "Menangani produksi video dari konsep storyboard hingga on-set direction untuk campaign dan konten sosial media.",
+		specialties: ["Video Campaign", "Behind the Scenes", "Color Grading"],
+		instagram: "https://instagram.com/",
+	},
+	{
+		name: "Fadli Ramadhan",
+		role: "Associate Photographer",
+		department: "creative",
+		photo: "/assets/image/ABOUT/ABT-ONE.jpg",
+		alt: "Foto Associate Photographer Mahalu Studio",
+		bio: "Fokus pada portrait natural dan sesi cahaya alami, banyak menangani produksi di Studio 02.",
+		specialties: ["Portrait", "Natural Light", "Editorial"],
+	},
+	{
+		name: "Zahira Maulida Rasyid",
+		role: "Make-up Artist",
+		department: "styling",
+		photo: "/assets/image/ABOUT/ABT-MUA.jpg",
+		alt: "Foto Make-up Artist Mahalu Studio",
+		bio: "Menyesuaikan riasan dengan konsep dan karakter cahaya ruangan, mulai dari beauty look sampai editorial bold.",
+		specialties: ["Beauty Look", "Editorial Makeup", "Touch-up On-set"],
+		instagram: "https://instagram.com/",
+	},
+	{
+		name: "Nahla Tu zahara",
+		role: "Fashion Stylist",
+		department: "styling",
+		photo: "/assets/image/ABOUT/ABT-ONE.jpg",
+		alt: "Foto Fashion Stylist Mahalu Studio",
+		bio: "Membantu kurasi wardrobe dan styling talent supaya selaras dengan mood board dan brand klien.",
+		specialties: ["Wardrobe Styling", "Mood Board", "Prop Styling"],
+	},
+	{
+		name: "Nama Studio Manager",
+		role: "Studio Manager",
+		department: "ops",
+		photo: "/assets/image/ABOUT/ABT-MNG.jpg",
+		alt: "Foto Studio Manager Mahalu Studio",
+		bio: "Titik kontak utama klien, dari jadwal booking, koordinasi add-on, sampai memastikan ruangan siap sebelum sesi dimulai.",
+		specialties: ["Koordinasi Booking", "Client Support", "Jadwal Studio"],
+		email: "hello@mahalustudio.com",
+	},
+	{
+		name: "Nama Studio Assistant",
+		role: "Studio Assistant",
+		department: "ops",
+		photo: "/assets/image/ABOUT/ABT-ONE.jpg",
+		alt: "Foto Studio Assistant Mahalu Studio",
+		bio: "Membantu persiapan set, alat, dan kebersihan ruangan sebelum dan sesudah setiap sesi produksi.",
+		specialties: ["Persiapan Set", "Equipment Check", "Housekeeping"],
+	},
+];
+
+const workValues: WorkValue[] = [
+	{ icon: "chat-circle-dots", title: "Diskusi Sebelum Hari-H", desc: "Tim kami senang diajak diskusi konsep lebih dulu, supaya semua orang datang dengan gambaran yang sama." },
+	{ icon: "users-three", title: "Kerja Lintas Peran", desc: "Photographer, MUA, dan stylist terbiasa berkoordinasi langsung di lokasi, bukan bekerja terpisah-pisah." },
+	{ icon: "clock", title: "Menghargai Waktu Klien", desc: "Persiapan alat dan ruangan selesai sebelum jadwal, supaya sesi bisa mulai tepat waktu." },
+	{ icon: "arrows-clockwise", title: "Terbuka Terhadap Revisi", desc: "Selama sesi berlangsung, tim tetap fleksibel menyesuaikan arahan sesuai kebutuhan di lapangan." },
+];
+
+const teamSize = teamMembers.length;
+---
+
+<Layout title="Tim Kami — Mahalu Studio">
+	<!-- Hero -->
+	<div class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg" aria-hidden="true"></div>
+		<div class="grain" aria-hidden="true"></div>
+		<div class="container-wrap relative pt-10 md:pt-20" data-animate>
+			<p class="kicker"><i class="ph ph-users-three" aria-hidden="true"></i>Tim Kami</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Orang-Orang di Balik Setiap Sesi Produksi
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				Dari lighting, riasan, styling, sampai koordinasi jadwal — kenali tim kecil yang memastikan setiap sesi di Mahalu Studio berjalan rapi dan sesuai konsep Anda.
+			</p>
+
+			<div class="flex flex-wrap gap-8">
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-users-three text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Anggota tim</p>
+						<p class="font-body text-[14px] text-text font-semibold">{teamSize} orang</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-buildings text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Departemen</p>
+						<p class="font-body text-[14px] text-text font-semibold">{departments.length} tim kerja</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-handshake text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Cara kerja</p>
+						<p class="font-body text-[14px] text-text font-semibold">Kolaboratif & langsung di lokasi</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<main class="container-wrap pt-16! pb-0! sec-block">
+		<!-- Grid tim per departemen -->
+		{departments.map((dept) => {
+			const members = teamMembers.filter((m) => m.department === dept.key);
+			return (
+				<section class="sec-block pt-8!" id={`dept-${dept.key}`} data-animate>
+					<p class="kicker"><i class={`ph ph-${dept.icon}`} aria-hidden="true"></i>{dept.label}</p>
+					<h2 class="font-display text-2xl text-text font-semibold mb-2">{dept.label}</h2>
+					<p class="font-body text-[14px] text-text-muted max-w-xl mb-8">{dept.desc}</p>
+
+					<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-animate-group>
+						{members.map((person) => (
+							<div class="card-hover rounded-2xl border border-border bg-card overflow-hidden flex flex-col" data-animate-item>
+								<div class="focus-frame relative aspect-[4/5] overflow-hidden bg-bg-soft">
+									<img src={person.photo} alt={person.alt} class="h-full w-full object-cover" loading="lazy" />
+									<span class="fc fc-tl" aria-hidden="true"></span>
+									<span class="fc fc-tr" aria-hidden="true"></span>
+									<span class="fc fc-bl" aria-hidden="true"></span>
+									<span class="fc fc-br" aria-hidden="true"></span>
+
+									{(person.instagram || person.email) && (
+										<div class="absolute bottom-3 right-3 flex gap-1.5">
+											{person.instagram && (
+												<a
+													href={person.instagram}
+													target="_blank"
+													rel="noopener noreferrer"
+													aria-label={`Instagram ${person.name}`}
+													class="flex items-center justify-center w-8 h-8 rounded-full bg-scrim border border-border text-text hover:text-accent transition-colors duration-150"
+												>
+													<i class="ph ph-instagram-logo text-[14px]" aria-hidden="true"></i>
+												</a>
+											)}
+											{person.email && (
+												<a
+													href={`mailto:${person.email}`}
+													aria-label={`Email ${person.name}`}
+													class="flex items-center justify-center w-8 h-8 rounded-full bg-scrim border border-border text-text hover:text-accent transition-colors duration-150"
+												>
+													<i class="ph ph-envelope-simple text-[14px]" aria-hidden="true"></i>
+												</a>
+											)}
+										</div>
+									)}
+								</div>
+
+								<div class="p-5 flex flex-col flex-1">
+									<h3 class="font-title text-[15px] text-text font-semibold">{person.name}</h3>
+									<p class="font-body text-[12.5px] text-accent font-medium mb-3">{person.role}</p>
+									<p class="font-body text-[13px] text-text-muted leading-relaxed mb-4 flex-1">{person.bio}</p>
+
+									<div class="flex flex-wrap gap-1.5">
+										{person.specialties.map((tag) => (
+											<span class="font-title text-[10.5px] uppercase tracking-wide text-text-dim bg-highlight-bg rounded-full px-2.5 py-1">
+												{tag}
+											</span>
+										))}
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+			);
+		})}
+
+		<!-- Cara kami bekerja -->
+		<section class="sec-block" data-animate>
+			<p class="kicker"><i class="ph ph-handshake" aria-hidden="true"></i>Cara Kami Bekerja</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-8">Bukan Sekadar Kumpulan Individu</h2>
+			<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-animate-group>
+				{workValues.map((v) => (
+					<div class="rounded-2xl border border-border bg-card p-6" data-animate-item>
+						<span class="flex items-center justify-center w-10 h-10 rounded-full bg-accent-soft text-accent mb-4">
+							<i class={`ph ph-${v.icon} text-lg`} aria-hidden="true"></i>
+						</span>
+						<h3 class="font-title text-[14px] text-text font-semibold mb-2">{v.title}</h3>
+						<p class="font-body text-[13px] text-text-muted leading-relaxed">{v.desc}</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- FAQ seputar tim -->
+		<section class="sec-block" data-animate id="faq">
+			<p class="kicker"><i class="ph ph-question" aria-hidden="true"></i>Pertanyaan Umum</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Seputar Tim Kami</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah bisa memilih fotografer atau MUA tertentu?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Bisa. Sampaikan preferensi Anda saat booking, dan tim kami akan usahakan sesuai jadwal yang tersedia.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah add-on MUA dan stylist dari tim internal?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Ya, seluruh add-on kreatif yang tercantum di halaman Harga dikerjakan oleh tim internal Mahalu Studio, bukan vendor luar.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Bagaimana kalau produksi butuh tim tambahan?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Diskusikan kebutuhan Anda dengan Studio Manager kami — untuk produksi skala besar, tim tambahan dapat diatur sebelumnya.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah tim ikut membantu selama sesi berlangsung?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Selalu. Studio Assistant standby sepanjang sesi untuk membantu kebutuhan teknis maupun non-teknis di lokasi.
+					</p>
+				</details>
+			</div>
+		</section>
+
+		<!-- CTA gabung tim -->
+		<section class="sec-block" data-animate>
+			<div class="rounded-2xl border border-border bg-accent-soft p-8 md:p-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+				<div>
+					<p class="kicker"><i class="ph ph-briefcase" aria-hidden="true"></i>Karir</p>
+					<h2 class="font-display text-xl md:text-2xl text-text font-semibold mb-2">Tertarik Bergabung dengan Tim Kami?</h2>
+					<p class="font-body text-[14px] text-text-muted leading-relaxed">
+						Kami selalu terbuka untuk fotografer, videographer, MUA, dan stylist berbakat yang ingin berkembang bersama Mahalu Studio.
+					</p>
+				</div>
+				<a
+					href="/about/careers"
+					class="inline-flex items-center justify-center gap-2 bg-accent text-[#fff8ee] font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full no-underline shrink-0 transition-transform hover:-translate-y-[1px]"
+				>
+					Lihat Lowongan
+					<i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+				</a>
+			</div>
+		</section>
+	</main>
+
+	<noscript>
+		<style>
+			[data-animate] {
+				opacity: 1 !important;
+			}
+		</style>
+	</noscript>
+
+	<script>
+		import { animate, inView, stagger } from "motion";
+
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		// Reveal-on-scroll — pola yang sama dengan halaman About & Ruangan,
+		// biar transisi antar halaman terasa konsisten.
+		if (prefersReducedMotion) {
+			document
+				.querySelectorAll<HTMLElement>("[data-animate]")
+				.forEach((el) => {
+					el.style.opacity = "1";
+				});
+		} else {
+			document.querySelectorAll<HTMLElement>("[data-animate]").forEach((el) => {
+				el.style.opacity = "0";
+			});
+
+			inView(
+				"[data-animate]",
+				(element) => {
+					animate(
+						element,
+						{ opacity: [0, 1], transform: ["translateY(24px)", "translateY(0)"] },
+						{ duration: 0.6, easing: [0.22, 1, 0.36, 1] },
+					);
+
+					const group = element.querySelectorAll<HTMLElement>(
+						"[data-animate-group] [data-animate-item]",
+					);
+					if (group.length) {
+						animate(
+							group,
+							{ opacity: [0, 1], transform: ["translateY(14px)", "translateY(0)"] },
+							{ duration: 0.45, delay: stagger(0.06, { startDelay: 0.15 }), easing: [0.22, 1, 0.36, 1] },
+						);
+					}
+				},
+				{ margin: "-10% 0px -10% 0px" },
+			);
+		}
+	</script>
+</Layout>

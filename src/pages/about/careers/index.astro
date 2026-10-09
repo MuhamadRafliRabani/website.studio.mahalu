@@ -1,0 +1,272 @@
+---
+// File ini diletakkan di: src/pages/about/careers.astro
+import { jobs, benefits, cultureValues } from "../../../data/dummy/careers.ts";
+import Layout from "../../../layouts/Layout.astro";
+
+const WHATSAPP_NUMBER = "6281234567890";
+
+const departments = Array.from(new Set(jobs.map((j) => j.department)));
+const jobsByDept = (dept: string) => jobs.filter((j) => j.department === dept);
+
+const typeBadgeColor: Record<string, string> = {
+	"Full-time": "bg-accent-soft text-accent",
+	"Part-time": "bg-highlight-bg text-text",
+	"Freelance": "bg-highlight-bg text-text",
+};
+---
+
+<Layout title="Karir — Mahalu Studio">
+	<!-- Hero -->
+	<section class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg"></div>
+		<div class="grain"></div>
+		<div class="container-wrap relative pt-10 md:pt-20">
+			<p class="kicker"><i class="ph ph-briefcase"></i>Karir</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Bergabung Membangun Ruang Produksi Ini
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				Mahalu Studio masih terus berkembang — kami cari orang-orang yang senang kerja detail, sigap di lapangan, dan nyaman jadi bagian dari tim kecil yang solid.
+			</p>
+
+			<div class="flex flex-wrap gap-8">
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-briefcase text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Posisi terbuka</p>
+						<p class="font-body text-[14px] text-text font-semibold">{jobs.length} posisi</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-buildings text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Departemen</p>
+						<p class="font-body text-[14px] text-text font-semibold">{departments.length} tim</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-map-pin text-accent text-xl"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Lokasi kerja</p>
+						<p class="font-body text-[14px] text-text font-semibold">Cilodong, Depok</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Why join us -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-heart"></i>Kenapa Bergabung</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Yang Anda Dapatkan</h2>
+			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+				{benefits.map((b) => (
+					<div class="card-hover rounded-xl border border-border bg-card p-5">
+						<i class={`ph ph-${b.icon} text-accent text-2xl mb-3 block`}></i>
+						<h3 class="font-title text-[14px] text-text font-semibold mb-1.5">{b.title}</h3>
+						<p class="font-body text-[13px] text-text-muted leading-relaxed">{b.desc}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Culture -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-users-three"></i>Cara Kami Bekerja</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Nilai yang Kami Pegang</h2>
+			<div class="grid md:grid-cols-3 gap-5">
+				{cultureValues.map((v) => (
+					<div class="border-t-2 border-accent pt-5">
+						<i class={`ph ph-${v.icon} text-accent text-xl mb-2 block`}></i>
+						<h3 class="font-title text-[14.5px] text-text font-semibold mb-2">{v.title}</h3>
+						<p class="font-body text-[13.5px] text-text-muted leading-relaxed">{v.desc}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Open positions -->
+	<section class="sec-block" id="posisi">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-list-magnifying-glass"></i>Lowongan</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-2">Posisi Terbuka</h2>
+			<p class="font-body text-[14px] text-text-muted max-w-xl mb-8">
+				Klik tiap posisi untuk lihat detail tanggung jawab dan syarat lengkapnya.
+			</p>
+
+			{departments.map((dept) => (
+				<div class="mb-8 last:mb-0">
+					<h3 class="font-title text-[12px] uppercase tracking-wider text-text-dim font-semibold mb-3">{dept}</h3>
+					<div class="flex flex-col gap-3">
+						{jobsByDept(dept).map((job) => (
+							<details class="group rounded-xl border border-border bg-card overflow-hidden">
+								<summary class="cursor-pointer list-none flex items-center justify-between gap-4 px-5 py-4">
+									<div class="flex items-center gap-3 min-w-0">
+										<span class="flex items-center justify-center w-9 h-9 rounded-full bg-accent-soft text-accent shrink-0">
+											<i class="ph ph-briefcase text-[15px]"></i>
+										</span>
+										<div class="min-w-0">
+											<h4 class="font-title text-[14.5px] text-text font-semibold truncate">{job.title}</h4>
+											<p class="font-body text-[12.5px] text-text-dim truncate">{job.location}</p>
+										</div>
+									</div>
+									<div class="flex items-center gap-3 shrink-0">
+										<span class={`font-title text-[10.5px] uppercase tracking-wide rounded-full px-2.5 py-1 ${typeBadgeColor[job.type]}`}>
+											{job.type}
+										</span>
+										<i class="ph ph-plus text-accent group-open:hidden"></i>
+										<i class="ph ph-minus text-accent hidden group-open:block"></i>
+									</div>
+								</summary>
+								<div class="px-5 pb-5 pt-1 border-t border-border">
+									<p class="font-body text-[13.5px] text-text-muted leading-relaxed mb-4">{job.summary}</p>
+
+									<p class="font-title text-[12px] uppercase tracking-wide text-text-dim font-semibold mb-2">Tanggung Jawab</p>
+									<ul class="flex flex-col gap-1.5 mb-4">
+										{job.responsibilities.map((r) => (
+											<li class="flex items-start gap-2 font-body text-[13.5px] text-text">
+												<i class="ph ph-check-circle text-accent shrink-0 mt-0.5"></i>
+												<span>{r}</span>
+											</li>
+										))}
+									</ul>
+
+									<p class="font-title text-[12px] uppercase tracking-wide text-text-dim font-semibold mb-2">Kualifikasi</p>
+									<ul class="flex flex-col gap-1.5 mb-5">
+										{job.requirements.map((r) => (
+											<li class="flex items-start gap-2 font-body text-[13.5px] text-text">
+												<i class="ph ph-check-circle text-accent shrink-0 mt-0.5"></i>
+												<span>{r}</span>
+											</li>
+										))}
+									</ul>
+
+									<a
+										href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Halo, saya tertarik melamar posisi ${job.title} di Mahalu Studio.`)}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="inline-flex items-center gap-2 bg-accent text-bg font-title text-[13px] font-semibold px-5 py-3 rounded-full"
+									>
+										<i class="ph ph-whatsapp-logo"></i> Lamar Posisi Ini
+									</a>
+								</div>
+							</details>
+						))}
+					</div>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<!-- Application process -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-path"></i>Alur Melamar</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Empat Langkah Sederhana</h2>
+			<div class="grid md:grid-cols-4 gap-5">
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">01</span>
+					<h3 class="font-title text-[14px] text-text font-semibold mb-2">Pilih Posisi</h3>
+					<p class="font-body text-[13px] text-text-muted leading-relaxed">Baca detail tanggung jawab dan kualifikasi di posisi yang sesuai.</p>
+				</div>
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">02</span>
+					<h3 class="font-title text-[14px] text-text font-semibold mb-2">Kirim Lamaran</h3>
+					<p class="font-body text-[13px] text-text-muted leading-relaxed">Klik "Lamar Posisi Ini", kirim CV/portofolio singkat via WhatsApp.</p>
+				</div>
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">03</span>
+					<h3 class="font-title text-[14px] text-text font-semibold mb-2">Obrolan Awal</h3>
+					<p class="font-body text-[13px] text-text-muted leading-relaxed">Sesi tanya-jawab singkat via chat atau telepon dengan tim kami.</p>
+				</div>
+				<div class="border-t-2 border-accent pt-5">
+					<span class="font-display text-2xl text-accent block mb-2">04</span>
+					<h3 class="font-title text-[14px] text-text font-semibold mb-2">Trial di Studio</h3>
+					<p class="font-body text-[13px] text-text-muted leading-relaxed">Untuk posisi on-site, ada sesi trial singkat langsung di studio sebelum konfirmasi akhir.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ -->
+	<section class="sec-block" id="faq">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-question"></i>Pertanyaan Umum</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Seputar Melamar</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 max-w-4xl">
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah bisa melamar tanpa pengalaman sebelumnya?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Untuk posisi Studio Assistant, kemauan belajar dan sigap di lapangan lebih diutamakan daripada jam terbang. Untuk posisi freelance kreatif (MUA/stylist), portofolio tetap jadi syarat utama.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Berapa lama proses rekrutmen berlangsung?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Biasanya 1-2 minggu dari lamaran masuk sampai konfirmasi akhir, tergantung kecocokan jadwal untuk sesi trial.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Tidak ada posisi yang cocok, apakah tetap bisa melamar?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Bisa. Kirim perkenalan singkat dan portofolio Anda via WhatsApp — kami simpan untuk dihubungi kalau ada posisi yang cocok ke depannya.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah posisi freelance bisa jadi full-time nantinya?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Terbuka kemungkinannya, terutama untuk rekanan yang konsisten diajak kolaborasi dan cocok dengan ritme kerja tim kami.
+					</p>
+				</details>
+			</div>
+		</div>
+	</section>
+
+	<!-- Open application CTA -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<div class="bg-accent-soft border border-border rounded-2xl px-8 py-12 md:px-14 md:py-14 text-center">
+				<h2 class="font-display text-2xl md:text-3xl text-text font-semibold mb-3">Tidak Menemukan Posisi yang Cocok?</h2>
+				<p class="font-body text-text-muted max-w-md mx-auto mb-7 text-[14.5px]">
+					Kirim perkenalan singkat dan portofolio Anda — kami senang kenal talenta baru meski belum ada posisi terbuka saat ini.
+				</p>
+				<a
+					href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Halo, saya ingin mengirim lamaran terbuka ke Mahalu Studio.")}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center gap-2 bg-accent text-bg font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full"
+				>
+					<i class="ph ph-whatsapp-logo"></i> Kirim Lamaran Terbuka
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		import { animate, inView } from "motion";
+
+		inView(".sec-block", ({ target }) => {
+			animate(target, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, easing: "ease-out" });
+		});
+	</script>
+</Layout>

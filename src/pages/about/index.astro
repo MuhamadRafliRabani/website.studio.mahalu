@@ -1,0 +1,403 @@
+---
+// File ini asumsinya diletakkan di: src/pages/about/index.astro
+// (sama kedalaman folder dengan src/pages/portofolio/index.astro & harga/index.astro)
+import { works } from "../../data/dummy/portofolio.ts";
+import Layout from "../../layouts/Layout.astro";
+
+interface Milestone {
+	year: string;
+	title: string;
+	desc: string;
+}
+
+interface Value {
+	icon: string;
+	title: string;
+	desc: string;
+}
+
+interface Feature {
+	icon: string;
+	title: string;
+	desc: string;
+}
+
+interface TeamPreview {
+	name: string;
+	role: string;
+	photo: string;
+	alt: string;
+}
+
+// TODO(Bani): ganti tahun & narasi di bawah sesuai histori asli studio lo.
+// Ini placeholder biar strukturnya kepakai — jangan sampai ke-deploy apa adanya.
+const milestones: Milestone[] = [
+	{ year: "20XX", title: "Mahalu Studio Berdiri", desc: "Diawali dari satu ruang kecil dengan satu set lighting, melayani produksi foto produk skala kecil." },
+	{ year: "20XX", title: "Studio 01 Resmi Dibuka", desc: "White cyclorama dengan kontrol cahaya penuh, dirancang khusus untuk campaign fashion dan katalog produk." },
+	{ year: "20XX", title: "Studio 02 Menyusul", desc: "Ruang bernuansa raw dan hangat dengan cahaya alami, untuk portrait dan produksi yang butuh nuansa natural." },
+	{ year: "Sekarang", title: "Terus Bertambah Tiap Bulan", desc: "Dari campaign fashion, katalog produk, portrait, hingga cover album musik — daftar produksi terus berkembang." },
+];
+
+const values: Value[] = [
+	{ icon: "sparkle", title: "Detail adalah Prioritas", desc: "Dari pencahayaan sampai props terkecil, kami perhatikan detail yang sering luput di studio lain." },
+	{ icon: "handshake", title: "Kolaboratif, Bukan Sekadar Sewa Tempat", desc: "Tim kami terbuka diskusi konsep sebelum hari-H — bukan cuma buka pintu lalu ditinggal." },
+	{ icon: "shield-check", title: "Transparan Soal Biaya", desc: "Semua tarif dan add-on dijelaskan di muka, tidak ada biaya tersembunyi yang muncul belakangan." },
+	{ icon: "leaf", title: "Ruang yang Dirawat", desc: "Kebersihan dan kondisi alat dicek rutin sebelum setiap sesi, supaya hasil produksi maksimal." },
+];
+
+const features: Feature[] = [
+	{ icon: "door-open", title: "Dua Karakter Ruang", desc: "Studio 01 white cyclorama untuk hasil bersih & konsisten, Studio 02 cahaya alami untuk nuansa raw & hangat — tinggal sesuaikan dengan konsep." },
+	{ icon: "palette", title: "Add-on Kreatif Lengkap", desc: "Color grading foto & video, MUA, sampai fashion stylist tersedia tanpa perlu cari vendor terpisah." },
+	{ icon: "tag", title: "Harga Jelas Sejak Awal", desc: "Semua tarif dan biaya add-on tercantum lengkap di halaman Harga — tidak ada biaya kejutan di hari-H." },
+	{ icon: "map-pin", title: "Lokasi Mudah Diakses", desc: "Berada di titik yang mudah dijangkau dengan akses parkir, memudahkan loading alat dan kedatangan tim besar." },
+];
+
+// TODO(Bani): ini masih data placeholder. Kalau halaman /about/team udah jadi,
+// idealnya array ini dipindah ke data/dummy/team.ts biar satu sumber data
+// dipakai bareng (nggak duplikat antara halaman ini dan halaman Tim).
+const teamPreview: TeamPreview[] = [
+	{ name: "Tomy Budi Hotomo", role: "Lead Photographer", photo: "/assets/image/ABOUT/ABT-LD.jpg", alt: "Foto Lead Photographer Mahalu Studio" },
+	{ name: "Syafira Salsabila", role: "Lead Videographer", photo: "/assets/image/ABOUT/ABT-VGR.jpg", alt: "Foto Lead Videographer Mahalu Studio" },
+	{ name: "Zahira Maulida Rasyid", role: "Make-up Artist", photo: "/assets/image/ABOUT/ABT-MUA.jpg", alt: "Foto Make-up Artist Mahalu Studio" },
+	{ name: "Feri Firmansyah", role: "Studio Manager", photo: "/assets/image/ABOUT/ABT-MNG.jpg", alt: "Foto Studio Manager Mahalu Studio" },
+];
+
+// Angka nyata dari data portofolio yang udah ada — biar nggak ngarang statistik.
+const totalWorks = works.length;
+const studioCount = new Set(works.map((w) => w.studio)).size;
+// TODO(Bani): dua angka ini masih placeholder, ganti dengan data asli.
+const teamSize = 8;
+const foundedYear = "2022";
+---
+
+<Layout title="Tentang Kami — Mahalu Studio">
+	<!-- Hero -->
+	<div class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg" aria-hidden="true"></div>
+		<div class="grain" aria-hidden="true"></div>
+		<div class="container-wrap relative pt-10 md:pt-20" data-animate>
+			<p class="kicker"><i class="ph ph-info" aria-hidden="true"></i>Tentang Kami</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Ruang yang Dibangun untuk Cerita Visual Anda
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				Mahalu Studio menyediakan dua karakter ruang produksi — white cyclorama dengan kontrol cahaya penuh di Studio 01, dan cahaya alami bernuansa raw & hangat di Studio 02 — didukung tim dan add-on kreatif yang bisa disesuaikan dengan kebutuhan produksi Anda.
+			</p>
+
+			<div class="flex flex-wrap gap-8">
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-calendar-check text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Beroperasi sejak</p>
+						<p class="font-body text-[14px] text-text font-semibold">{foundedYear}</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-clock-counter-clockwise text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Produksi terlayani</p>
+						<p class="font-body text-[14px] text-text font-semibold">{totalWorks}+ karya</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-buildings text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Ruang produksi</p>
+						<p class="font-body text-[14px] text-text font-semibold">{studioCount} studio aktif</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<i class="ph ph-users-three text-accent text-xl" aria-hidden="true"></i>
+					<div>
+						<p class="font-title text-[12px] text-text-dim">Anggota tim</p>
+						<p class="font-body text-[14px] text-text font-semibold">{teamSize} orang</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<main class="container-wrap pt-16! pb-0! sec-block">
+		<!-- Cerita Kami -->
+		<section class="sec-block pt-4! grid md:grid-cols-2 gap-10 items-center" data-animate>
+			<div>
+				<p class="kicker"><i class="ph ph-book-open" aria-hidden="true"></i>Cerita Kami</p>
+				<h2 class="font-display text-2xl md:text-3xl text-text font-semibold mb-4">Dari Ruang Kecil Menjadi Rumah Produksi</h2>
+				<p class="font-body text-[14.5px] text-text-muted leading-relaxed mb-4">
+					Mahalu Studio dimulai dari kebutuhan sederhana: ruang produksi yang bisa diajak diskusi, bukan sekadar disewa jam-jaman. Seiring berjalannya waktu, kami menambah karakter ruang, melengkapi peralatan, dan membentuk tim kreatif supaya klien tidak perlu bolak-balik mencari vendor terpisah untuk setiap kebutuhan produksinya.
+				</p>
+				<p class="font-body text-[14.5px] text-text-muted leading-relaxed">
+					Hari ini, Mahalu Studio jadi tempat lahirnya campaign fashion, katalog produk, portrait natural, hingga cover album musik — dengan pendekatan yang sama sejak awal: detail diperhatikan, biaya transparan, dan ruang selalu dalam kondisi siap pakai.
+				</p>
+			</div>
+			<div class="focus-frame relative aspect-[4/5] overflow-hidden rounded-xl border border-border">
+				<!-- TODO(Bani): ganti dengan foto asli suasana studio -->
+				<img
+					src="/assets/image/ABOUT/ABT-ONE.jpg"
+					alt="Suasana produksi di dalam Mahalu Studio"
+					class="h-full w-full object-cover"
+					loading="lazy"
+				/>
+				<span class="fc fc-tl" aria-hidden="true"></span>
+				<span class="fc fc-tr" aria-hidden="true"></span>
+				<span class="fc fc-bl" aria-hidden="true"></span>
+				<span class="fc fc-br" aria-hidden="true"></span>
+			</div>
+		</section>
+
+		<!-- Perjalanan Kami -->
+		<section class="sec-block" data-animate>
+			<p class="kicker"><i class="ph ph-map-trifold" aria-hidden="true"></i>Perjalanan Kami</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-8">Empat Titik Penting</h2>
+			<div class="grid md:grid-cols-4 gap-5" data-animate-group>
+				{milestones.map((m, i) => (
+					<div class="border-t-2 border-accent pt-5" data-animate-item>
+						<span class="font-display text-2xl text-accent block mb-2">{String(i + 1).padStart(2, "0")}</span>
+						<p class="font-title text-[11px] uppercase tracking-wider text-text-dim font-semibold mb-1.5">{m.year}</p>
+						<h3 class="font-title text-[14.5px] text-text font-semibold mb-2">{m.title}</h3>
+						<p class="font-body text-[13.5px] text-text-muted leading-relaxed">{m.desc}</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- Visi & Misi -->
+		<section class="sec-block" data-animate>
+			<p class="kicker"><i class="ph ph-target" aria-hidden="true"></i>Visi & Misi</p>
+			<div class="grid md:grid-cols-2 gap-6">
+				<div class="rounded-2xl border border-border bg-card p-7">
+					<span class="flex items-center justify-center w-10 h-10 rounded-full bg-accent-soft text-accent mb-4">
+						<i class="ph ph-eye text-lg" aria-hidden="true"></i>
+					</span>
+					<h3 class="font-display text-lg text-text font-semibold mb-2">Visi</h3>
+					<p class="font-body text-[14px] text-text-muted leading-relaxed">
+						Menjadi ruang produksi visual pilihan utama yang membuat proses kreatif klien — dari konsep sampai hasil akhir — terasa lebih mudah dan tanpa hambatan teknis.
+					</p>
+				</div>
+				<div class="rounded-2xl border border-border bg-card p-7">
+					<span class="flex items-center justify-center w-10 h-10 rounded-full bg-accent-soft text-accent mb-4">
+						<i class="ph ph-flag text-lg" aria-hidden="true"></i>
+					</span>
+					<h3 class="font-display text-lg text-text font-semibold mb-2">Misi</h3>
+					<p class="font-body text-[14px] text-text-muted leading-relaxed">
+						Menyediakan ruang, peralatan, dan tim kreatif yang lengkap dalam satu tempat, dengan harga yang transparan dan pelayanan yang mengutamakan detail di setiap sesi produksi.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Nilai-Nilai Kami -->
+		<section class="sec-block" data-animate>
+			<p class="kicker"><i class="ph ph-heart" aria-hidden="true"></i>Nilai-Nilai Kami</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-8">Yang Kami Pegang di Setiap Sesi</h2>
+			<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-animate-group>
+				{values.map((v) => (
+					<div class="rounded-2xl border border-border bg-card p-6" data-animate-item>
+						<span class="flex items-center justify-center w-10 h-10 rounded-full bg-accent-soft text-accent mb-4">
+							<i class={`ph ph-${v.icon} text-lg`} aria-hidden="true"></i>
+						</span>
+						<h3 class="font-title text-[14px] text-text font-semibold mb-2">{v.title}</h3>
+						<p class="font-body text-[13px] text-text-muted leading-relaxed">{v.desc}</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- Kenapa Pilih Mahalu Studio -->
+		<section class="sec-block" data-animate>
+			<p class="kicker"><i class="ph ph-lightbulb" aria-hidden="true"></i>Kenapa Pilih Kami</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-8">Empat Alasan Klien Kembali Booking</h2>
+			<div class="grid sm:grid-cols-2 gap-5" data-animate-group>
+				{features.map((f) => (
+					<div class="flex items-start gap-4 rounded-2xl border border-border bg-card p-6" data-animate-item>
+						<span class="flex items-center justify-center w-11 h-11 rounded-full bg-accent-soft text-accent shrink-0">
+							<i class={`ph ph-${f.icon} text-lg`} aria-hidden="true"></i>
+						</span>
+						<div>
+							<h3 class="font-title text-[14.5px] text-text font-semibold mb-1.5">{f.title}</h3>
+							<p class="font-body text-[13.5px] text-text-muted leading-relaxed">{f.desc}</p>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- Tim Kami (teaser) -->
+		<section class="sec-block" data-animate>
+			<div class="flex items-end justify-between gap-4 mb-8 flex-wrap">
+				<div>
+					<p class="kicker"><i class="ph ph-users-three" aria-hidden="true"></i>Tim Kami</p>
+					<h2 class="font-display text-2xl text-text font-semibold">Orang-Orang di Balik Setiap Sesi</h2>
+				</div>
+				<a
+					href="/about/team"
+					class="inline-flex items-center gap-1.5 font-title text-[13px] text-accent font-semibold no-underline shrink-0"
+				>
+					Lihat Semua Tim
+					<i class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5" aria-hidden="true"></i>
+				</a>
+			</div>
+			<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-animate-group>
+				{teamPreview.map((person) => (
+					<div class="card-hover focus-frame group rounded-xl border border-border bg-card overflow-hidden" data-animate-item>
+						<div class="relative aspect-[4/5] overflow-hidden bg-bg-soft">
+							<!-- TODO(Bani): ganti dengan foto tim asli -->
+							<img src={person.photo} alt={person.alt} class="h-full w-full object-cover" loading="lazy" />
+							<span class="fc fc-tl" aria-hidden="true"></span>
+							<span class="fc fc-tr" aria-hidden="true"></span>
+							<span class="fc fc-bl" aria-hidden="true"></span>
+							<span class="fc fc-br" aria-hidden="true"></span>
+						</div>
+						<div class="p-4">
+							<h3 class="font-title text-[13.5px] text-text font-semibold">{person.name}</h3>
+							<p class="font-body text-[12px] text-text-dim">{person.role}</p>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- Lokasi (teaser) -->
+		<section class="sec-block" data-animate>
+			<div class="rounded-2xl border border-border bg-accent-soft p-8 md:p-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+				<div>
+					<p class="kicker"><i class="ph ph-map-pin" aria-hidden="true"></i>Lokasi</p>
+					<h2 class="font-display text-xl md:text-2xl text-text font-semibold mb-2">Datang Langsung Sebelum Booking? Boleh Banget</h2>
+					<!-- TODO(Bani): samakan alamat & jam operasional ini dengan yang ada di dropdown navbar & halaman /lokasi -->
+					<address class="not-italic font-body text-[14px] text-text-muted leading-relaxed">
+						Jl. Contoh Raya No. 12, Jakarta Selatan — Buka setiap hari, 09.00–21.00
+					</address>
+				</div>
+				<a
+					href="/lokasi"
+					class="inline-flex items-center justify-center gap-2 bg-accent text-[#fff8ee] font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full no-underline shrink-0 transition-transform hover:-translate-y-[1px]"
+				>
+					Lihat Rute & Jam Buka
+					<i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+				</a>
+			</div>
+		</section>
+
+		<!-- FAQ Tentang Kami -->
+		<section class="sec-block" data-animate id="faq">
+			<p class="kicker"><i class="ph ph-question" aria-hidden="true"></i>Pertanyaan Umum</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Seputar Mahalu Studio</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah bisa survei lokasi sebelum booking?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Bisa. Hubungi tim kami untuk jadwalkan kunjungan sebelum menentukan studio dan add-on yang paling cocok untuk konsep Anda.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah studio bisa disewa di luar jam operasional?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						<!-- TODO(Bani): pastikan kebijakan ini sesuai kondisi asli studio lo -->
+						Untuk kebutuhan di luar jam operasional normal, hubungi tim kami terlebih dahulu — akan dicek ketersediaan dan kemungkinan biaya tambahan.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Apakah menerima kerja sama brand atau komunitas?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Terbuka. Untuk kolaborasi brand, komunitas, atau kebutuhan produksi jangka panjang, silakan hubungi kami langsung untuk mendiskusikan skema kerja samanya.
+					</p>
+				</details>
+				<details class="border-b border-border py-4 group">
+					<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+						<span>Bagaimana kalau saya belum yakin studio mana yang cocok?</span>
+						<i class="ph ph-plus text-accent shrink-0 group-open:hidden" aria-hidden="true"></i>
+						<i class="ph ph-minus text-accent shrink-0 hidden group-open:block" aria-hidden="true"></i>
+					</summary>
+					<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">
+						Ceritakan konsep produksi Anda ke tim kami — kami bantu rekomendasikan Studio 01 atau Studio 02 sesuai kebutuhan pencahayaan dan nuansa yang diinginkan.
+					</p>
+				</details>
+			</div>
+		</section>
+
+		<!-- CTA -->
+		<!-- Sengaja dikomentari, ngikutin pola yang udah ada di Portofolio &
+		     Harga — biar konsisten kalau Bani suatu saat aktifin semuanya sekaligus. -->
+		<!-- <section class="sec-block" data-animate>
+			<div class="rounded-2xl border border-border bg-highlight-bg p-10 text-center">
+				<h2 class="font-display text-2xl font-bold tracking-tight text-text">
+					Siap Wujudkan Produksi Berikutnya di Mahalu Studio?
+				</h2>
+				<p class="mx-auto mt-2 max-w-md text-[14.5px] text-text-muted">
+					Pilih studio yang cocok, cek tarifnya, dan kunci jadwal Anda hari ini.
+				</p>
+				<a
+					href="/ruangan"
+					class="mt-6 inline-flex items-center justify-center rounded-md bg-accent px-7 py-3 text-[14.5px] font-semibold text-[#fff8ee] transition-opacity hover:opacity-90"
+				>
+					Lihat Ruangan & Tarif
+				</a>
+			</div>
+		</section> -->
+	</main>
+
+	<noscript>
+		<style>
+			[data-animate] {
+				opacity: 1 !important;
+			}
+		</style>
+	</noscript>
+
+	<script>
+		import { animate, inView, stagger } from "motion";
+
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		// Reveal-on-scroll — pola yang sama dengan halaman Portofolio, biar
+		// transisi antar halaman terasa konsisten.
+		if (prefersReducedMotion) {
+			document
+				.querySelectorAll<HTMLElement>("[data-animate]")
+				.forEach((el) => {
+					el.style.opacity = "1";
+				});
+		} else {
+			document.querySelectorAll<HTMLElement>("[data-animate]").forEach((el) => {
+				el.style.opacity = "0";
+			});
+
+			inView(
+				"[data-animate]",
+				(element) => {
+					animate(
+						element,
+						{ opacity: [0, 1], transform: ["translateY(24px)", "translateY(0)"] },
+						{ duration: 0.6, easing: [0.22, 1, 0.36, 1] },
+					);
+
+					const group = element.querySelectorAll<HTMLElement>(
+						"[data-animate-group] [data-animate-item]",
+					);
+					if (group.length) {
+						animate(
+							group,
+							{ opacity: [0, 1], transform: ["translateY(14px)", "translateY(0)"] },
+							{ duration: 0.45, delay: stagger(0.06, { startDelay: 0.15 }), easing: [0.22, 1, 0.36, 1] },
+						);
+					}
+				},
+				{ margin: "-10% 0px -10% 0px" },
+			);
+		}
+	</script>
+</Layout>

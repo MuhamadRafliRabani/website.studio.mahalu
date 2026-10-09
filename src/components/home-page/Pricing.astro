@@ -1,0 +1,81 @@
+---
+import ApertureIcon from './ApertureIcon.astro';
+---
+<section class="sec-block" id="tarif">
+	<div class="kicker sec-anim">
+		<ApertureIcon />
+		<span>Tarif &amp; Add-on</span>
+	</div>
+	
+	<div class="mb-[36px] sec-anim">
+		<h2 class="font-display text-[26px] font-bold tracking-tight mb-[8px]">Tarif sewa & add-on</h2>
+		<p class="text-text-muted text-[15px] max-w-[560px] font-body">
+			Berlaku untuk kedua ruangan, sudah termasuk lighting bawaan dan asisten on-set.
+		</p>
+	</div>
+	
+	<div class="grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-[20px] items-stretch sec-anim">
+		<!-- Pricing Card (Highlight) -->
+		<div class="relative bg-highlight-bg backdrop-blur-[14px] border border-accent rounded-[8px] p-[28px] flex flex-col transition-colors duration-350 focus-frame focus-locked">
+			<span class="absolute -top-[11px] left-[24px] bg-accent text-[#fff8ee] text-[11px] font-semibold tracking-[0.03em] px-[10px] py-[4px] rounded-full inline-flex items-center gap-[5px] font-title">
+				<ApertureIcon class="w-[11px] h-[11px]" />
+				Paling sering dipilih
+			</span>
+			<span class="fc fc-tl" aria-hidden="true"></span><span class="fc fc-tr" aria-hidden="true"></span>
+			<span class="fc fc-bl" aria-hidden="true"></span><span class="fc fc-br" aria-hidden="true"></span>
+			
+			<p class="text-[12px] tracking-[0.06em] uppercase text-accent font-title font-semibold mb-[6px]">Sewa Ruangan</p>
+			<h3 class="font-display font-bold text-[19px] mb-[18px]">Pilih durasi sesuai kebutuhan</h3>
+			
+			<div class="grid grid-cols-2 gap-[10px]">
+				<div class="bg-card-alt border border-border rounded-[4px] p-[14px_16px] flex flex-col gap-[4px] transition-colors duration-350">
+					<span class="text-[12.5px] text-text-muted font-body">1 jam</span>
+					<strong class="font-display font-bold text-[17px]">Rp 350rb</strong>
+				</div>
+				<div class="bg-card-alt border border-border rounded-[4px] p-[14px_16px] flex flex-col gap-[4px] transition-colors duration-350">
+					<span class="text-[12.5px] text-text-muted font-body">3 jam</span>
+					<strong class="font-display font-bold text-[17px]">Rp 750rb</strong>
+				</div>
+				<div class="bg-card-alt border border-border rounded-[4px] p-[14px_16px] flex flex-col gap-[4px] transition-colors duration-350">
+					<span class="text-[12.5px] text-text-muted font-body">6 jam</span>
+					<strong class="font-display font-bold text-[17px]">Rp 1jt</strong>
+				</div>
+				<div class="bg-card-alt border border-border rounded-[4px] p-[14px_16px] flex flex-col gap-[4px] transition-colors duration-350">
+					<span class="text-[12.5px] text-text-muted font-body">8 jam</span>
+					<strong class="font-display font-bold text-[17px]">Rp 1,5jt</strong>
+				</div>
+			</div>
+			<p class="text-[12.5px] text-text-dim mt-[16px] font-body">
+				Overtime dihitung per jam mengikuti tarif 1 jam berlaku.
+			</p>
+		</div>
+
+		<!-- Add-ons Card -->
+		<div class="bg-card backdrop-blur-[14px] border border-border rounded-[8px] p-[28px] flex flex-col transition-colors duration-350 card-hover">
+			<p class="text-[12px] tracking-[0.06em] uppercase text-accent font-title font-semibold mb-[6px]">Opsional</p>
+			<h3 class="font-display font-bold text-[19px] mb-[18px]">Add-on jasa kreatif</h3>
+			
+			<ul class="list-none text-[13.5px] text-text-muted grow font-body flex flex-col">
+				<li class="flex justify-between items-center py-[12px] border-b border-border">
+					<span class="flex items-center gap-[8px]"><i class="ph ph-check text-accent text-[14px]"></i>Color grading foto</span>
+					<strong class="text-text font-display font-bold text-[14.5px] whitespace-nowrap">Rp 1jt / batch</strong>
+				</li>
+				<li class="flex justify-between items-center py-[12px] border-b border-border">
+					<span class="flex items-center gap-[8px]"><i class="ph ph-check text-accent text-[14px]"></i>Color grading video</span>
+					<strong class="text-text font-display font-bold text-[14.5px] whitespace-nowrap">Rp 1jt / menit</strong>
+				</li>
+				<li class="flex justify-between items-center py-[12px] border-b border-border">
+					<span class="flex items-center gap-[8px]"><i class="ph ph-check text-accent text-[14px]"></i>Make-up artist</span>
+					<strong class="text-text font-display font-bold text-[14.5px] whitespace-nowrap">Rp 500rb / sesi</strong>
+				</li>
+				<li class="flex justify-between items-center py-[12px]">
+					<span class="flex items-center gap-[8px]"><i class="ph ph-check text-accent text-[14px]"></i>Fashion stylist</span>
+					<strong class="text-text font-display font-bold text-[14.5px] whitespace-nowrap">Rp 750rb / sesi</strong>
+				</li>
+			</ul>
+			<button class="bg-accent text-[#fff8ee] w-full mt-[20px] px-[26px] py-[14px] border-none rounded-[4px] font-title font-semibold text-[14.5px] cursor-pointer btn-shutter">
+				Hitung Biaya & Booking
+			</button>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,481 @@
+---
+interface NavChild {
+	label: string;
+	href: string;
+	desc: string;
+	icon: string;
+}
+
+interface FeaturedLink {
+	label: string;
+	href: string;
+	address: string;
+	hours: string;
+	icon: string;
+}
+
+const ruanganOptions: NavChild[] = [
+	{ label: "Studio 01", href: "/ruangan/studio-01", desc: "White cyclorama, kontrol cahaya penuh", icon: "square" },
+	{ label: "Studio 02", href: "/ruangan/studio-02", desc: "Cahaya alami, nuansa raw & hangat", icon: "sun" },
+];
+
+// Lokasi dipisah jadi "featured link" — bukan cuma item list biasa — karena
+// ini yang paling sering dicari orang sebelum booking. Ditaruh sebagai kartu
+// besar di kiri dropdown biar langsung kelihatan tanpa perlu baca satu-satu.
+const featuredAbout: FeaturedLink = {
+	label: "Lokasi Studio",
+	href: "https://www.google.com/maps?rlz=1C1CHBD_idID1138ID1138&um=1&ie=UTF-8&fb=1&gl=id&sa=X&geocode=KaPso-9fSHyvMTdZJ0989Cxm&daddr=Jl.+Raya+Abdul+Gani+No.48,+RT.006/RW.001,+Kalibaru,+Kec.+Cilodong,+Kota+Depok,+Jawa+Barat+16414",
+	// TODO(Bani): ganti dengan alamat & jam operasional asli sebelum deploy.
+	address: "Jl. Contoh Raya No. 12, Jakarta Selatan",
+	hours: "Buka setiap hari, 09.00–21.00",
+	icon: "map-pin",
+};
+
+const aboutLinks: NavChild[] = [
+	{ label: "Tim Kami", href: "/about/team", desc: "Kenali tim di balik Mahalu Studio", icon: "users-three" },
+	{ label: "Blog", href: "/blog", desc: "Artikel dan update terbaru", icon: "article" },
+	{ label: "Karir", href: "/about/careers", desc: "Bergabunglah dengan tim kami", icon: "briefcase" },
+];
+
+const topLinks = [
+	{ label: "Portofolio", href: "/portofolio" },
+	{ label: "Harga", href: "/harga" },
+	{ label: "FAQ", href: "/faq" },
+];
+
+// Active-page detection — used for aria-current + visual highlight.
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(href));
+---
+
+<div class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 md:pt-5 md:px-[15%]">
+	<nav
+		aria-label="Navigasi utama"
+		class="mx-auto flex items-center justify-between gap-4
+			rounded-2xl shadow-lg bg-nav-bg backdrop-blur-[10px]
+			px-4 py-2.5 md:px-5
+			transition-colors duration-350 ease-in-out"
+	>
+		<!-- Brand -->
+		<div class="flex items-center gap-2 shrink-0">
+			<a
+				href="/"
+				class="flex items-center gap-2 no-underline font-title text-[17px] font-semibold tracking-tight text-text"
+			>
+				<span class="flex items-center justify-center w-8 h-8 rounded-full bg-accent-soft text-accent">
+					<i class="ph ph-flower-lotus text-[16px]" aria-hidden="true"></i>
+				</span>
+				Mahalu Studio
+			</a>
+		</div>
+
+		<!-- Center nav -->
+		<ul class="hidden md:flex items-center gap-1 list-none" role="menubar" aria-label="Menu utama">
+			<!-- Ruangan dropdown -->
+			<li class="relative nav-dropdown" role="none">
+				<div class="flex items-center">
+					<a
+						href="/ruangan"
+						role="menuitem"
+						aria-current={isActive("/ruangan") ? "page" : undefined}
+						class:list={[
+							"flex items-center gap-1.5 rounded-full pl-4 pr-2 py-1.5 text-[13.5px] font-title font-medium no-underline transition-colors duration-200",
+							isActive("/ruangan") ? "text-text bg-highlight-bg" : "text-text-muted hover:text-text hover:bg-bg-soft",
+						]}
+					>
+						<i class="ph ph-door-open text-[15px]" aria-hidden="true"></i>
+						Ruangan
+					</a>
+					<button
+						type="button"
+						class="nav-dropdown-trigger flex items-center justify-center w-7 h-7 rounded-full text-text-muted hover:text-text"
+						aria-haspopup="menu"
+						aria-expanded="false"
+						aria-controls="ruanganMenu"
+						aria-label="Buka submenu Ruangan"
+						data-dropdown="ruangan"
+					>
+						<i class="ph ph-caret-down text-[11px] transition-transform duration-250" aria-hidden="true"></i>
+					</button>
+				</div>
+
+				<div
+					class="nav-dropdown-panel absolute left-1/2 -translate-x-1/2 top-full pt-2.5
+						invisible opacity-0 translate-y-1 pointer-events-none
+						transition-all duration-200 ease-out z-20"
+					data-dropdown-panel="ruangan"
+				>
+					<ul
+						id="ruanganMenu"
+						role="menu"
+						aria-label="Submenu Ruangan"
+						class="surface-solid isolate list-none w-[280px] rounded-xl border border-border shadow-[0_20px_45px_-8px_rgba(34,29,24,0.22)] ring-1 ring-black/5 p-1.5"
+					>
+						{ruanganOptions.map((opt) => (
+							<li role="none">
+								<a
+									href={opt.href}
+									role="menuitem"
+									class="group flex items-center gap-3 rounded-lg px-3 py-2.5 no-underline hover:bg-highlight-bg transition-colors duration-150"
+								>
+									<span class="flex items-center justify-center w-8 h-8 rounded-full bg-accent-soft text-accent shrink-0">
+										<i class={`ph ph-${opt.icon} text-[14px]`} aria-hidden="true"></i>
+									</span>
+									<span class="flex flex-col gap-0.5 min-w-0">
+										<span class="font-title text-[13.5px] font-semibold text-text">{opt.label}</span>
+										<span class="text-[12px] text-text-dim truncate">{opt.desc}</span>
+									</span>
+									<i class="ph ph-arrow-up-right text-[12px] text-text-dim ml-auto shrink-0 opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0" aria-hidden="true"></i>
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</li>
+
+			{topLinks.map((link) => (
+				<li role="none">
+					<a
+						href={link.href}
+						role="menuitem"
+						aria-current={isActive(link.href) ? "page" : undefined}
+						class:list={[
+							"block rounded-full px-4 py-1.5 text-[13.5px] font-title font-medium no-underline transition-colors duration-200",
+							isActive(link.href) ? "text-text bg-highlight-bg" : "text-text-muted hover:text-text hover:bg-bg-soft",
+						]}
+					>
+						{link.label}
+					</a>
+				</li>
+			))}
+
+			<!-- About dropdown -->
+			<li class="relative nav-dropdown" role="none">
+				<div class="flex items-center">
+					<a
+						href="/about"
+						role="menuitem"
+						aria-current={isActive("/about") ? "page" : undefined}
+						class:list={[
+							"flex items-center gap-1.5 rounded-full pl-4 pr-2 py-1.5 text-[13.5px] font-title font-medium no-underline transition-colors duration-200",
+							isActive("/about") ? "text-text bg-highlight-bg" : "text-text-muted hover:text-text hover:bg-bg-soft",
+						]}
+					>
+						<i class="ph ph-info text-[15px]" aria-hidden="true"></i>
+						About
+					</a>
+					<button
+						type="button"
+						class="nav-dropdown-trigger flex items-center justify-center w-7 h-7 rounded-full text-text-muted hover:text-text"
+						aria-haspopup="menu"
+						aria-expanded="false"
+						aria-controls="aboutMenu"
+						aria-label="Buka submenu About"
+						data-dropdown="about"
+					>
+						<i class="ph ph-caret-down text-[11px] transition-transform duration-250" aria-hidden="true"></i>
+					</button>
+				</div>
+
+				<div
+					class="nav-dropdown-panel absolute right-0 top-full pt-2.5
+						invisible opacity-0 translate-y-1 pointer-events-none
+						transition-all duration-200 ease-out z-20"
+					data-dropdown-panel="about"
+				>
+					<!--
+						Layout "bagi": kartu Lokasi besar di kiri (featured),
+						3 link lain ditumpuk di kanan. Lokasi paling sering
+						dicari orang sebelum booking, jadi dikasih porsi
+						visual paling besar — bukan disamakan sama link lain.
+					-->
+					<div
+						id="aboutMenu"
+						role="menu"
+						aria-label="Submenu About"
+						class="surface-solid isolate grid grid-cols-[1.15fr_1fr] gap-2
+							w-[min(540px,calc(100vw-2rem))] rounded-2xl border border-border
+							shadow-[0_20px_45px_-8px_rgba(34,29,24,0.22)] ring-1 ring-black/5 p-2"
+					>
+						<a
+							href={featuredAbout.href}
+							role="menuitem"
+							aria-label={`${featuredAbout.label} — ${featuredAbout.address}, ${featuredAbout.hours}`}
+							class="group relative flex flex-col justify-between rounded-xl bg-accent-soft p-4 no-underline overflow-hidden transition-transform duration-200 hover:-translate-y-0.5"
+						>
+							<div class="flex items-center justify-between">
+								<span class="flex items-center justify-center w-9 h-9 rounded-full bg-card-alt text-accent shadow-sm">
+									<i class="ph ph-map-pin text-[16px]" aria-hidden="true"></i>
+								</span>
+								<i class="ph ph-arrow-up-right text-[13px] text-accent opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0" aria-hidden="true"></i>
+							</div>
+							<div class="flex flex-col gap-1 mt-8">
+								<span class="text-[10.5px] font-title font-semibold uppercase tracking-wider text-accent">Kunjungi Kami</span>
+								<span class="font-title text-[16px] font-semibold text-text leading-snug">{featuredAbout.label}</span>
+								<address class="not-italic text-[12px] leading-snug text-text-dim mt-1">{featuredAbout.address}</address>
+								<span class="inline-flex items-center gap-1.5 text-[11.5px] text-text-dim mt-2">
+									<i class="ph ph-clock text-[12.5px]" aria-hidden="true"></i>
+									{featuredAbout.hours}
+								</span>
+							</div>
+						</a>
+
+						<div role="group" aria-label="Tautan About lainnya" class="flex flex-col gap-1">
+							{aboutLinks.map((opt) => (
+								<a
+									href={opt.href}
+									role="menuitem"
+									class="group flex items-center gap-3 rounded-lg px-3 py-2.5 no-underline hover:bg-highlight-bg transition-colors duration-150"
+								>
+									<span class="flex items-center justify-center w-8 h-8 rounded-full bg-accent-soft text-accent shrink-0">
+										<i class={`ph ph-${opt.icon} text-[14px]`} aria-hidden="true"></i>
+									</span>
+									<span class="flex flex-col gap-0.5 min-w-0">
+										<span class="font-title text-[13px] font-semibold text-text">{opt.label}</span>
+										<span class="text-[11.5px] text-text-dim truncate">{opt.desc}</span>
+									</span>
+									<i class="ph ph-arrow-up-right text-[12px] text-text-dim ml-auto shrink-0 opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0" aria-hidden="true"></i>
+								</a>
+							))}
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+
+		<!-- Right side -->
+		<div class="flex items-center gap-2.5 shrink-0">
+			<button
+				type="button"
+				class="theme-toggle relative w-9 h-9 rounded-full border border-border bg-card-alt flex items-center justify-center cursor-pointer text-text shrink-0 transition-all duration-250 hover:border-accent focus-visible:outline-2 focus-visible:outline-accent outline-offset-2"
+				id="themeToggle"
+				aria-pressed="false"
+				aria-label="Ganti ke mode gelap"
+			>
+				<i class="ph ph-sun absolute text-[16px] transition-all duration-400 opacity-0 -rotate-90 scale-100" id="iconSun" aria-hidden="true"></i>
+				<i class="ph ph-moon absolute text-[16px] transition-all duration-400 opacity-100 rotate-0 scale-100" id="iconMoon" aria-hidden="true"></i>
+			</button>
+
+			<a
+				href="/ruangan"
+				class="hidden sm:inline-block bg-accent text-[#fff8ee] px-[18px] py-[9px] rounded-full text-[13px] font-title font-semibold no-underline btn-shutter transition-transform duration-200 hover:-translate-y-[1px]"
+			>
+				Cek Jadwal
+			</a>
+
+			<!-- Mobile menu trigger -->
+			<button
+				type="button"
+				id="mobileMenuTrigger"
+				class="md:hidden w-9 h-9 rounded-full border border-border bg-card-alt flex items-center justify-center text-text"
+				aria-expanded="false"
+				aria-controls="mobileMenuPanel"
+				aria-label="Buka menu navigasi"
+			>
+				<i class="ph ph-list text-[17px]" aria-hidden="true"></i>
+			</button>
+		</div>
+	</nav>
+
+	<!-- Mobile dropdown panel -->
+	<div
+		id="mobileMenuPanel"
+		class="surface-solid md:hidden hidden max-w-[1180px] mx-auto mt-2 rounded-2xl border border-border shadow-[0_12px_28px_rgba(34,29,24,0.1)] p-3"
+	>
+		<ul class="flex flex-col list-none">
+			<!-- Ruangan: text navigates, caret toggles submenu -->
+			<li class="flex flex-col">
+				<div class="flex items-center justify-between rounded-lg px-3 py-2.5">
+					<a href="/ruangan" aria-current={isActive("/ruangan") ? "page" : undefined} class="flex-1 text-[14px] font-title font-medium text-text no-underline">Ruangan</a>
+					<button
+						type="button"
+						class="mobile-dropdown-trigger flex items-center justify-center w-7 h-7 -mr-1 rounded-full text-text-muted"
+						aria-expanded="false"
+						aria-controls="mobileRuanganMenu"
+						aria-label="Buka opsi ruangan"
+						data-mobile-dropdown="ruangan"
+					>
+						<i class="ph ph-caret-down text-[12px] transition-transform duration-200" aria-hidden="true"></i>
+					</button>
+				</div>
+				<ul id="mobileRuanganMenu" class="hidden pl-3 flex flex-col list-none" data-mobile-panel="ruangan">
+					{ruanganOptions.map((opt) => (
+						<li>
+							<a href={opt.href} class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] text-text-muted hover:text-text no-underline">
+								<i class={`ph ph-${opt.icon} text-[13px] text-accent`} aria-hidden="true"></i>
+								{opt.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</li>
+
+			{topLinks.map((link) => (
+				<li>
+					<a
+						href={link.href}
+						aria-current={isActive(link.href) ? "page" : undefined}
+						class="block rounded-lg px-3 py-2.5 text-[14px] font-title font-medium text-text no-underline"
+					>
+						{link.label}
+					</a>
+				</li>
+			))}
+
+			<!-- About: text navigates, caret toggles submenu. Lokasi ditaruh
+			     sebagai kartu tersendiri, selalu kelihatan tanpa perlu buka
+			     accordion — sama alasannya kayak versi desktop. -->
+			<li class="flex flex-col">
+				<div class="flex items-center justify-between rounded-lg px-3 py-2.5 bg-none!">
+					<a href="/about" aria-current={isActive("/about") ? "page" : undefined} class="flex-1 text-[14px] font-title font-medium text-text no-underline ">About</a>
+					<button
+						type="button"
+						class="mobile-dropdown-trigger flex items-center justify-center w-7 h-7 -mr-1 rounded-full text-text-muted"
+						aria-expanded="false"
+						aria-controls="mobileAboutMenu"
+						aria-label="Buka opsi about"
+						data-mobile-dropdown="about"
+					>
+						<i class="ph ph-caret-down text-[12px] transition-transform duration-200" aria-hidden="true"></i>
+					</button>
+				</div>
+
+				<a
+					href={featuredAbout.href}
+					aria-label={`${featuredAbout.label} — ${featuredAbout.address}, ${featuredAbout.hours}`}
+					class="mx-3 mb-1.5 flex items-center gap-3 rounded-lg bg-accent-soft px-3 py-2.5 no-underline"
+				>
+					<span class="flex items-center justify-center w-8 h-8 rounded-full bg-card-alt text-accent shrink-0">
+						<i class="ph ph-map-pin text-[13px]" aria-hidden="true"></i>
+					</span>
+					<span class="flex flex-col gap-0.5 min-w-0">
+						<span class="text-[13px] font-title font-semibold text-text">{featuredAbout.label}</span>
+						<span class="text-[11.5px] text-text-dim truncate">{featuredAbout.address}</span>
+					</span>
+				</a>
+
+				<ul id="mobileAboutMenu" class="hidden pl-3 flex flex-col list-none" data-mobile-panel="about">
+					{aboutLinks.map((opt) => (
+						<li>
+							<a href={opt.href} class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] text-text-muted hover:text-text no-underline">
+								<i class={`ph ph-${opt.icon} text-[13px] text-accent`} aria-hidden="true"></i>
+								{opt.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<style>
+	/*
+		Kenapa ini ditambahin: dropdown sebelumnya pakai `bg-card-alt`, token
+		yang sama dipakai di tempat lain di project (mis. theme toggle button).
+		Kalau token itu didefinisikan dengan alpha < 1 di global CSS (buat
+		efek glass di elemen lain), efek itu ikut kebawa ke sini — makanya
+		dropdown kelihatan tembus pandang / "berbayang". `.surface-solid`
+		sengaja pakai warna solid sendiri, independen dari token itu, jadi
+		dropdown ini dijamin opaque apa pun isi --card-alt di file lain.
+		Ganti hex di bawah kalau warnanya beda dari palet asli lo.
+	*/
+	.surface-solid {
+		--dropdown-surface: #fbf6ee;
+		background-color: var(--dropdown-surface);
+	}
+	:global([data-theme="dark"]) .surface-solid {
+		--dropdown-surface: #201810;
+	}
+
+	:global([data-theme="dark"]) .theme-toggle #iconSun {
+		opacity: 1 !important;
+		transform: rotate(0deg) scale(1) !important;
+	}
+	:global([data-theme="dark"]) .theme-toggle #iconMoon {
+		opacity: 0 !important;
+		transform: rotate(90deg) scale(0.4) !important;
+	}
+
+	/* Desktop dropdown open state — driven by JS (click + keyboard) rather
+	   than pure :hover, so it works for keyboard/touch users too. Hover is
+	   layered on as a mouse convenience via the .nav-dropdown:hover rule. */
+	.nav-dropdown-panel.is-open,
+	.nav-dropdown:hover .nav-dropdown-panel {
+		visibility: visible;
+		opacity: 1;
+		transform: translateY(0) translateX(-50%);
+		pointer-events: auto;
+	}
+	.nav-dropdown:hover .nav-dropdown-panel[data-dropdown-panel="about"] {
+		transform: translateY(0);
+	}
+	.nav-dropdown-panel.is-open[data-dropdown-panel="about"] {
+		transform: translateY(0);
+	}
+	.nav-dropdown-trigger[aria-expanded="true"] i {
+		transform: rotate(180deg);
+	}
+	.mobile-dropdown-trigger[aria-expanded="true"] i {
+		transform: rotate(180deg);
+	}
+
+	[aria-current="page"] {
+		font-weight: 600;
+	}
+</style>
+
+<script>
+	// Mobile menu open/close
+	const mobileTrigger = document.getElementById("mobileMenuTrigger");
+	const mobilePanel = document.getElementById("mobileMenuPanel");
+	mobileTrigger?.addEventListener("click", () => {
+		const isOpen = !mobilePanel?.classList.contains("hidden");
+		mobilePanel?.classList.toggle("hidden");
+		mobileTrigger.setAttribute("aria-expanded", String(!isOpen));
+	});
+
+	// Mobile submenu accordions (Ruangan / About) — generic, works for any count
+	document.querySelectorAll<HTMLButtonElement>("[data-mobile-dropdown]").forEach((trigger) => {
+		const key = trigger.dataset.mobileDropdown;
+		const panel = document.querySelector<HTMLElement>(`[data-mobile-panel="${key}"]`);
+		trigger.addEventListener("click", () => {
+			const isOpen = !panel?.classList.contains("hidden");
+			panel?.classList.toggle("hidden");
+			trigger.setAttribute("aria-expanded", String(!isOpen));
+		});
+	});
+
+	// Desktop dropdowns — click/keyboard toggle on top of the CSS hover
+	// convenience. Closes on outside click and on Escape.
+	const dropdownTriggers = document.querySelectorAll<HTMLButtonElement>("[data-dropdown]");
+
+	function closeAllDropdowns() {
+		document.querySelectorAll<HTMLButtonElement>("[data-dropdown]").forEach((t) => t.setAttribute("aria-expanded", "false"));
+		document.querySelectorAll<HTMLElement>("[data-dropdown-panel]").forEach((p) => p.classList.remove("is-open"));
+	}
+
+	dropdownTriggers.forEach((trigger) => {
+		const key = trigger.dataset.dropdown;
+		const panel = document.querySelector<HTMLElement>(`[data-dropdown-panel="${key}"]`);
+
+		trigger.addEventListener("click", () => {
+			const willOpen = trigger.getAttribute("aria-expanded") !== "true";
+			closeAllDropdowns();
+			if (willOpen) {
+				trigger.setAttribute("aria-expanded", "true");
+				panel?.classList.add("is-open");
+			}
+		});
+	});
+
+	document.addEventListener("click", (e) => {
+		if (!(e.target instanceof Element) || !e.target.closest(".nav-dropdown")) {
+			closeAllDropdowns();
+		}
+	});
+
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") closeAllDropdowns();
+	});
+</script>

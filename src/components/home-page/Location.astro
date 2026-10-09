@@ -1,0 +1,77 @@
+---
+import ApertureIcon from './ApertureIcon.astro';
+---
+<section class="sec-block" id="lokasi">
+	<div class="kicker sec-anim">
+		<ApertureIcon />
+		<span>Kunjungi Kami</span>
+	</div>
+	
+	<div class="mb-[36px] sec-anim">
+		<h2 class="font-display text-[26px] font-bold tracking-tight mb-[8px]">Lokasi & jam operasional</h2>
+	</div>
+	
+	<div class="grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-[24px] sec-anim">
+		<!-- Map Panel (Menggunakan Iframe Google Maps) -->
+		<div class="relative min-h-[320px] bg-bg-soft border border-border rounded-[8px] overflow-hidden transition-colors duration-350">
+			<iframe 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2710.211633236015!2d106.8342788!3d-6.4386619!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xaf7c485fefa3eca3%3A0x662cf47c4f275937!2sMahalu%20Spa%2C%20Nail%20Art%20%26%20Eyelash!5e1!3m2!1sen!2sid!4v1788422196987!5m2!1sen!2sid" 
+                class="absolute inset-0 w-full h-full border-0  " 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+			
+            <!-- Map Footer Overlay -->
+			<div class="absolute left-0 right-0 bottom-0 flex justify-between items-center gap-[12px] p-[16px_18px] bg-gradient-to-t from-scrim to-transparent">
+				<p class="text-[13.5px] font-semibold font-title">Mahalu Studio, Depok</p>
+				<a href="https://www.google.com/maps/place/Mahalu+Spa,+Nail+Art+%26+Eyelash/@-6.4386619,106.8342788,614m/data=!3m1!1e3!4m12!1m5!3m4!2zNsKwMjYnMzYuNCJTIDEwNsKwNTAnMzYuMyJF!8m2!3d-6.4434543!4d106.8434179!3m5!1s0xaf7c485fefa3eca3:0x662cf47c4f275937!8m2!3d-6.4371726!4d106.8344861!16s%2Fg%2F11x_jf1c3p?entry=ttu&g_ep=EgoyMDI2MDgzMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="bg-bg text-text px-[16px] py-[9px] border border-border rounded-[4px] font-title text-[13px] cursor-pointer inline-flex items-center justify-center transition-colors duration-250 hover:border-text-dim no-underline">
+					Buka di Peta
+				</a>
+			</div>
+		</div>
+
+		<!-- Location Info Cards -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
+			<div class="group bg-card backdrop-blur-[14px] border border-border rounded-[8px] p-[18px] flex flex-col gap-[12px] card-hover">
+				<div class="w-[32px] h-[32px] rounded-[8px] bg-accent-soft text-accent flex items-center justify-center shrink-0 transition-colors duration-350 group-hover:bg-accent group-hover:text-[#fff8ee]">
+					<i class="ph ph-map-pin text-[16px] transition-transform duration-400 group-hover:rotate-[28deg] cubic-bezier(0.34,1.56,0.64,1)"></i>
+				</div>
+				<div>
+					<p class="text-[12px] text-text-dim mb-[3px] font-body">Alamat</p>
+					<p class="text-[13.5px] text-text leading-[1.5] font-body">Jl. Raya Abdul Gani No.48, RT.006/RW.001, Kalibaru, Kec. Cilodong, Kota Depok, Jawa Barat 16414</p>
+				</div>
+			</div>
+			
+			<div class="group bg-card backdrop-blur-[14px] border border-border rounded-[8px] p-[18px] flex flex-col gap-[12px] card-hover">
+				<div class="w-[32px] h-[32px] rounded-[8px] bg-accent-soft text-accent flex items-center justify-center shrink-0 transition-colors duration-350 group-hover:bg-accent group-hover:text-[#fff8ee]">
+					<i class="ph ph-clock text-[16px] transition-transform duration-400 group-hover:rotate-[28deg] cubic-bezier(0.34,1.56,0.64,1)"></i>
+				</div>
+				<div>
+					<p class="text-[12px] text-text-dim mb-[3px] font-body">Jam operasional</p>
+					<p class="text-[13.5px] text-text leading-[1.5] font-body">Setiap hari, 08.00–22.00 WIB</p>
+				</div>
+			</div>
+			
+			<div class="group bg-card backdrop-blur-[14px] border border-border rounded-[8px] p-[18px] flex flex-col gap-[12px] card-hover">
+				<div class="w-[32px] h-[32px] rounded-[8px] bg-accent-soft text-accent flex items-center justify-center shrink-0 transition-colors duration-350 group-hover:bg-accent group-hover:text-[#fff8ee]">
+					<i class="ph ph-navigation-arrow text-[16px] transition-transform duration-400 group-hover:rotate-[28deg] cubic-bezier(0.34,1.56,0.64,1)"></i>
+				</div>
+				<div>
+					<p class="text-[12px] text-text-dim mb-[3px] font-body">Akses</p>
+					<p class="text-[13.5px] text-text leading-[1.5] font-body">5 menit dari Setu Cilodong</p>
+				</div>
+			</div>
+			
+			<div class="group bg-card backdrop-blur-[14px] border border-border rounded-[8px] p-[18px] flex flex-col gap-[12px] card-hover">
+				<div class="w-[32px] h-[32px] rounded-[8px] bg-accent-soft text-accent flex items-center justify-center shrink-0 transition-colors duration-350 group-hover:bg-accent group-hover:text-[#fff8ee]">
+					<i class="ph ph-phone text-[16px] transition-transform duration-400 group-hover:rotate-[28deg] cubic-bezier(0.34,1.56,0.64,1)"></i>
+				</div>
+				<div>
+					<p class="text-[12px] text-text-dim mb-[3px] font-body">Kontak</p>
+					<p class="text-[13.5px] text-text leading-[1.5] font-body">+62 812-3456-7890 (WhatsApp)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

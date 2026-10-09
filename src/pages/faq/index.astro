@@ -1,0 +1,208 @@
+---
+import { rooms } from "../../data/dummy/rooms.ts";
+import Layout from "../../layouts/Layout.astro";
+
+// Adjust these import paths if your folder structure differs
+
+interface FAQItem {
+	q: string;
+	a: string;
+}
+
+interface FAQCategory {
+	id: string;
+	icon: string;
+	label: string;
+	intro: string;
+	items: FAQItem[];
+}
+
+// Room-specific FAQs pulled straight from rooms.ts and tagged by studio name,
+// so this page never drifts out of sync with what's shown on each room's
+// detail page.
+const roomFaqs: FAQItem[] = rooms.flatMap((room) =>
+	room.faqs.map((faq) => ({
+		q: `[${room.shortName}] ${faq.q}`,
+		a: faq.a,
+	})),
+);
+
+const categories: FAQCategory[] = [
+	{
+		id: "umum",
+		icon: "info",
+		label: "Umum",
+		intro: "Hal-hal dasar seputar Mahalu Studio sebelum Anda mulai merencanakan produksi.",
+		items: [
+			{
+				q: "Mahalu Studio itu apa, dan siapa yang cocok menyewanya?",
+				a: "Mahalu Studio adalah ruang produksi visual rental di Cilodong, Depok — disewakan per jam untuk fotografer, brand, dan tim produksi yang butuh ruang dengan lighting siap pakai. Cocok untuk campaign fashion, katalog e-commerce, video komersial, sampai proyek personal.",
+			},
+			{
+				q: "Jam operasional studio kapan saja?",
+				a: "Studio buka setiap hari, 08.00–22.00 WIB. Kalau butuh sesi di luar jam tersebut, sampaikan saat booking — bisa dipertimbangkan kasus per kasus.",
+			},
+			{
+				q: "Apakah studio ini punya kru fotografer sendiri?",
+				a: "Tidak. Kami menyediakan ruang, lighting, dan asisten on-set untuk bantu teknis (atur c-stand, ganti modifier, dsb) — tapi fotografer/videografer dibawa oleh tim Anda sendiri.",
+			},
+			{
+				q: "Apakah bisa datang untuk survei lokasi sebelum booking?",
+				a: "Bisa. Hubungi kami via WhatsApp untuk jadwalkan kunjungan singkat di luar jam sewa aktif.",
+			},
+		],
+	},
+	{
+		id: "booking",
+		icon: "calendar-check",
+		label: "Booking & Jadwal",
+		intro: "Alur dari memilih ruangan sampai hari pemotretan.",
+		items: [
+			{
+				q: "Bagaimana cara booking studio?",
+				a: "Pilih ruangan di halaman /ruangan, tentukan durasi dan add-on yang dibutuhkan di kalkulator, lalu klik \"Booking via WhatsApp\" — pesan otomatis berisi detail pilihan Anda akan terkirim ke tim kami untuk konfirmasi slot.",
+			},
+			{
+				q: "Apakah perlu bayar DP untuk mengunci jadwal?",
+				a: "Ya, DP 50% dari total estimasi mengunci slot Anda. Sisanya dibayar di hari-H sebelum sesi dimulai.",
+			},
+			{
+				q: "Bagaimana kalau ingin membatalkan atau reschedule booking?",
+				a: "Pembatalan H-3 sebelum jadwal mengembalikan DP penuh. Pembatalan di bawah H-3, DP dapat dialihkan ke jadwal lain dalam 30 hari — hubungi tim kami sesegera mungkin.",
+			},
+			{
+				q: "Kalau sesi molor dari durasi yang dipesan, bagaimana hitungannya?",
+				a: "Kelebihan waktu dihitung overtime mengikuti tarif 1 jam yang berlaku untuk ruangan tersebut, dihitung proporsional per menit kelebihan.",
+			},
+			{
+				q: "Berapa lama sebelumnya sebaiknya booking dilakukan?",
+				a: "Idealnya H-3 hingga H-7 untuk memastikan slot dan add-on (MUA, stylist) tersedia, terutama untuk akhir pekan yang biasanya lebih cepat penuh.",
+			},
+		],
+	},
+	{
+		id: "ruangan",
+		icon: "door-open",
+		label: "Ruangan & Peralatan",
+		intro: "Pertanyaan teknis seputar fasilitas dan spesifikasi tiap ruangan.",
+		items: [
+			{
+				q: "Apakah kamera dan lensa termasuk dalam sewa?",
+				a: "Tidak. Yang kami sediakan adalah ruang, lighting, dan kru on-set. Kamera, lensa, dan software editing dibawa sendiri oleh fotografer atau tim produksi Anda.",
+			},
+			{
+				q: "Apa bedanya Studio 01 dan Studio 02?",
+				a: "Studio 01 adalah white cyclorama dengan kontrol cahaya artifisial penuh — cocok untuk katalog dan editorial dengan latar bersih. Studio 02 mengandalkan cahaya alami dari jendela utara dengan nuansa raw dan hangat — cocok untuk editorial personal dan konten lifestyle.",
+			},
+			...roomFaqs,
+		],
+	},
+	{
+		id: "harga",
+		icon: "tag",
+		label: "Harga & Pembayaran",
+		intro: "Cara kerja tarif ruangan dan add-on jasa kreatif.",
+		items: [
+			{
+				q: "Kenapa harga per jam beda-beda tergantung durasi?",
+				a: "Makin panjang durasi yang dipesan, makin murah tarif efektif per jamnya. Detail lengkap tiap tier bisa dicek di halaman /harga.",
+			},
+			{
+				q: "Apa bedanya add-on \"ikut durasi\" dan \"flat\"?",
+				a: "Color grading foto & video harganya naik mengikuti durasi ruangan yang dipesan. MUA dan fashion stylist tarifnya tetap per booking, berapa pun jam sewa ruangannya.",
+			},
+			{
+				q: "Metode pembayaran apa saja yang diterima?",
+				a: "Transfer bank dan e-wallet. Detail rekening dikirim setelah konfirmasi booking via WhatsApp.",
+			},
+			{
+				q: "Apakah harga yang disepakati bisa berubah setelah booking?",
+				a: "Tidak. Tarif yang disepakati saat booking terkunci — perubahan hanya terjadi jika Anda sendiri menambah durasi atau add-on di hari-H.",
+			},
+		],
+	},
+	{
+		id: "lokasi",
+		icon: "map-pin",
+		label: "Lokasi & Akses",
+		intro: "Info praktis untuk hari kedatangan Anda.",
+		items: [
+			{
+				q: "Di mana lokasi studio dan seberapa jauh dari akses tol?",
+				a: "Studio berada di Cilodong, Depok, sekitar 5 menit dari akses Tol Margonda & Cijago.",
+			},
+			{
+				q: "Apakah tersedia parkir untuk kru produksi?",
+				a: "Tersedia area parkir mobil dan motor di dalam kompleks studio, cukup untuk kru produksi hingga 15 orang.",
+			},
+			{
+				q: "Apakah ada akses lift atau tangga untuk bawa peralatan berat?",
+				a: "Kedua ruangan berada di lantai dasar tanpa tangga, jadi memudahkan bongkar-muat properti dan peralatan besar.",
+			},
+		],
+	},
+];
+
+const totalQuestions = categories.reduce((sum, cat) => sum + cat.items.length, 0);
+---
+
+<Layout title="FAQ — Mahalu Studio">
+	<!-- Hero -->
+	<section class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg"></div>
+		<div class="grain"></div>
+		<div class="container-wrap relative pt-10 md:pt-20">
+			<p class="kicker"><i class="ph ph-question"></i>Pertanyaan yang Sering Diajukan</p>
+			<h1 class="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-4">
+				Semua yang Perlu Anda Tahu Sebelum Booking
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">
+				{totalQuestions} pertanyaan dikelompokkan per topik — dari alur booking, spesifikasi ruangan, sampai kebijakan pembayaran.
+			</p>
+
+			<!-- Quick jump nav -->
+			<div class="flex flex-wrap gap-2">
+				{categories.map((cat) => (
+					<a
+						href={`#${cat.id}`}
+						class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-[13px] font-title font-semibold text-text-muted transition-colors duration-200 hover:border-accent hover:text-text"
+					>
+						<i class={`ph ph-${cat.icon} text-accent`}></i> {cat.label}
+					</a>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Category sections -->
+	{categories.map((cat) => (
+		<section class="sec-block" id={cat.id}>
+			<div class="container-wrap">
+				<p class="kicker"><i class={`ph ph-${cat.icon}`}></i>{cat.label}</p>
+				<h2 class="font-display text-2xl text-text font-semibold mb-2">{cat.label}</h2>
+				<p class="font-body text-[14px] text-text-muted max-w-xl mb-8">{cat.intro}</p>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+					{cat.items.map((item) => (
+						<details class="border-b border-border py-4 group">
+							<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+								<span>{item.q}</span>
+								<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+								<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+							</summary>
+							<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">{item.a}</p>
+						</details>
+					))}
+				</div>
+			</div>
+		</section>
+	))}
+
+	<script>
+		import { animate, inView } from "motion";
+
+		inView(".sec-block", ({ target }) => {
+			animate(target, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, easing: "ease-out" });
+		});
+	</script>
+</Layout>

@@ -1,0 +1,121 @@
+---
+---
+
+<div class="relative rounded-[28px] p-[6px] sm:p-2  overflow-hidden transition-colors duration-350">
+
+	<!-- CTA -->
+	<section class="relative bg-accent-soft container mx-auto border border-border rounded-[20px] py-[52px] px-[24px] sm:px-[36px] text-center overflow-hidden transition-colors duration-350 sec-anim">
+		<!-- Dekorasi Latar -->
+		<svg class="absolute top-1/2 -right-[30px] w-[220px] h-[220px] -translate-y-1/2 text-accent opacity-20 pointer-events-none" viewBox="0 0 100 100" aria-hidden="true">
+			<polygon points="50,4 93,27 93,73 50,96 7,73 7,27" fill="none" stroke="currentColor" stroke-width="0.8" />
+			<polygon points="50,20 78,35 78,65 50,80 22,65 22,35" fill="none" stroke="currentColor" stroke-width="0.8" />
+			<circle cx="50" cy="50" r="10" fill="none" stroke="currentColor" stroke-width="0.8" />
+		</svg>
+
+		<h2 class="relative font-display text-[28px] font-bold tracking-tight mb-[10px]">Siap menjadwalkan produksi Anda?</h2>
+		<p class="relative text-text-muted text-[14.5px] font-body max-w-[480px] mx-auto mb-[26px]">
+			Kunci slot secara mandiri dalam hitungan menit, atau hubungi tim kami untuk kebutuhan set khusus.
+		</p>
+
+		<div class="relative flex gap-[14px] justify-center flex-wrap">
+			<button type="button" class="bg-accent text-[#fff8ee] px-[26px] py-[14px] border-none rounded-[4px] font-title font-semibold text-[14.5px] cursor-pointer btn-shutter">
+				Booking Slot Sekarang
+			</button>
+			<button type="button" class="bg-transparent text-text px-[24px] py-[14px] border border-border rounded-[4px] font-title text-[14.5px] cursor-pointer transition-colors duration-250 hover:border-text-dim btn-shutter">
+				Tanya via WhatsApp
+			</button>
+		</div>
+	</section>
+
+	<!-- Footer menggunakan font-footer (system-ui) -->
+	<footer class="relative px-[20px] sm:px-[36px] pt-[44px] container mx-auto pb-[24px] transition-colors duration-350">
+		<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] pb-8 border-b border-border">
+
+			<!-- Brand -->
+			<div class="flex flex-col">
+				<a href="/" class="inline-flex items-center gap-2 mb-3 no-underline">
+					<span class="flex items-center justify-center w-8 h-8 rounded-full bg-accent-soft text-accent">
+						<i class="ph ph-aperture text-[16px]" aria-hidden="true"></i>
+					</span>
+					<span class="font-title text-[15px] font-semibold text-text">Mahalu Studio</span>
+				</a>
+				<p class="font-footer text-[13px] text-text-dim leading-relaxed max-w-[220px] mb-[6px]">
+					Ruang produksi visual dengan dua karakter cahaya berbeda, di Depok, Jawa Barat.
+				</p>
+				<p class="font-footer text-[12px] text-text-dim">© 2026 Mahalu Studio</p>
+			</div>
+
+			<!-- Navigasi -->
+			<div class="flex flex-col font-footer">
+				<h5 class="text-text font-semibold text-[13.5px] mb-[14px] font-title">Navigasi</h5>
+				<a href="/ruangan" class="mb-[10px] text-[13px] text-text-dim hover:text-accent transition-colors no-underline">Ruangan</a>
+				<a href="/portofolio" class="mb-[10px] text-[13px] text-text-dim hover:text-accent transition-colors no-underline">Portofolio</a>
+				<a href="/harga" class="mb-[10px] text-[13px] text-text-dim hover:text-accent transition-colors no-underline">Tarif</a>
+				<a href="/harga#faq" class="text-[13px] text-text-dim hover:text-accent transition-colors no-underline">FAQ</a>
+			</div>
+
+			<!-- Terhubung -->
+			<div class="flex flex-col font-footer">
+				<h5 class="text-text font-semibold text-[13.5px] mb-[14px] font-title">Terhubung</h5>
+				<a href="#" class="mb-[10px] inline-flex items-center gap-1.5 text-[13px] text-text-dim hover:text-accent transition-colors no-underline">
+					Instagram <i class="ph ph-arrow-up-right text-[11px]" aria-hidden="true"></i>
+				</a>
+				<a href="#" class="mb-[10px] inline-flex items-center gap-1.5 text-[13px] text-text-dim hover:text-accent transition-colors no-underline">
+					WhatsApp <i class="ph ph-arrow-up-right text-[11px]" aria-hidden="true"></i>
+				</a>
+				<a href="#" class="inline-flex items-center gap-1.5 text-[13px] text-text-dim hover:text-accent transition-colors no-underline">
+					Email <i class="ph ph-arrow-up-right text-[11px]" aria-hidden="true"></i>
+				</a>
+			</div>
+
+			<!-- Newsletter -->
+			<div class="flex flex-col font-footer">
+				<h5 class="text-text font-semibold text-[13.5px] mb-[14px] font-title">Newsletter</h5>
+				<p class="text-[12.5px] text-text-dim leading-relaxed mb-4 max-w-[240px]">
+					Info promo, jadwal kosong, dan tips produksi langsung ke email Anda.
+				</p>
+				<!-- TODO(Bani): form ini belum kekoneksi ke service apa pun.
+				     Sambungin ke Resend/Mailchimp/endpoint sendiri dulu sebelum
+				     dipakai — sekarang cuma tampilan. -->
+				<form class="relative flex items-center" data-newsletter-form>
+					<i class="ph ph-envelope-simple absolute left-3.5 text-text-dim text-[14px] pointer-events-none" aria-hidden="true"></i>
+					<input
+						type="email"
+						name="email"
+						required
+						placeholder="Email Anda..."
+						aria-label="Alamat email untuk newsletter"
+						class="w-full rounded-full border border-border bg-card pl-9 pr-11 py-2.5 text-[13px] text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors duration-200"
+					/>
+					<button
+						type="submit"
+						aria-label="Kirim email"
+						class="absolute right-1.5 w-7 h-7 rounded-full bg-accent text-[#fff8ee] flex items-center justify-center border-none cursor-pointer"
+					>
+						<i class="ph ph-arrow-right text-[13px]" aria-hidden="true"></i>
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="flex flex-wrap items-center justify-between gap-3 pt-6 text-[12px] text-text-dim font-footer">
+			<p>Seluruh hak cipta dilindungi.</p>
+			<div class="flex items-center gap-5">
+				<a href="/privasi" class="hover:text-accent transition-colors no-underline">Kebijakan Privasi</a>
+				<a href="/syarat" class="hover:text-accent transition-colors no-underline">Syarat & Ketentuan</a>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<script>
+	// Placeholder handler biar nggak reload halaman pas ditekan sebelum
+	// backend-nya kesambung. Ganti isinya begitu endpoint newsletter siap.
+	document.querySelectorAll<HTMLFormElement>("[data-newsletter-form]").forEach((form) => {
+		form.addEventListener("submit", (e) => {
+			e.preventDefault();
+			// TODO(Bani): kirim ke endpoint/service newsletter di sini.
+			console.warn("Newsletter form belum terhubung ke service apa pun.");
+		});
+	});
+</script>

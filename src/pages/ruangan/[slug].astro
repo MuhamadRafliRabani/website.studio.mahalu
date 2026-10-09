@@ -1,0 +1,442 @@
+---
+// Adjust this import path if your layouts folder differs
+import Layout from "../../layouts/Layout.astro";
+import { rooms, getOtherRooms, type Room } from "../../data/dummy/rooms.ts";
+
+export function getStaticPaths() {
+	return rooms.map((room) => ({
+		params: { slug: room.slug },
+		props: { room },
+	}));
+}
+
+interface Props {
+	room: Room;
+}
+
+const { room } = Astro.props;
+const otherRooms = getOtherRooms(room.slug);
+
+const formatRupiah = (n: number) => n.toLocaleString("id-ID");
+
+// Ganti dengan nomor WhatsApp asli studio (format internasional, tanpa +/spasi/strip)
+const WHATSAPP_NUMBER = "6281234567890";
+---
+
+<Layout title={`${room.name} — Mahalu Studio`}>
+	<!-- Breadcrumb -->
+	<!-- <section class="pt-8 pb-2">
+		<div class="container-wrap">
+			<nav class="font-body text-[13px] text-text-dim flex items-center gap-2">
+				<a href="/" class="hover:text-accent transition-colors">Home</a>
+				<i class="ph ph-caret-right text-[10px]"></i>
+				<a href="/ruangan" class="hover:text-accent transition-colors">Ruangan</a>
+				<i class="ph ph-caret-right text-[10px]"></i>
+				<span class="text-text">{room.shortName}</span>
+			</nav>
+		</div>
+	</section> -->
+
+	<!-- Hero gallery — matches the grid-bg/grain treatment used on /ruangan -->
+	<section class="sec-block pt-24 md:pt-28 relative overflow-hidden">
+		<div class="grid-bg"></div>
+		<div class="grain"></div>
+		<div class="container-wrap relative pt-10 md:pt-20">
+			<p class="kicker"><i class="ph ph-camera"></i>{room.shortName}</p>
+			<h1 class="font-display text-[clamp(2rem,4vw,3.1rem)] font-semibold text-text max-w-2xl leading-[1.1] mb-3">
+				{room.name}
+			</h1>
+			<p class="font-body text-text-muted max-w-xl text-[15.5px] leading-relaxed mb-8">{room.tagline}</p>
+
+			<!-- Simple, independent aspect ratios — no height-matching between
+			     columns. Main image keeps aspect-[4/3] at every breakpoint, and
+			     thumbnails are always a 2-column grid (2×2). Nothing here depends
+			     on a sibling's computed height, so it can't collapse or blow up. -->
+			<div class="grid gap-3 md:grid-cols-[2fr_1fr]">
+				<button
+					type="button"
+					class="focus-frame card-hover relative rounded-2xl overflow-hidden border border-border  block group"
+					data-open-gallery="0"
+				>
+					<span class="fc fc-tl"></span><span class="fc fc-tr"></span><span class="fc fc-bl"></span><span class="fc fc-br"></span>
+					<img src={room.heroImage} alt={room.name} class="w-full h-full object-cover" />
+					<span class="absolute bottom-3 right-3 bg-scrim text-text text-[12px] font-title px-3 py-1.5 rounded-full border border-border inline-flex items-center gap-1.5">
+						<i class="ph ph-arrows-out"></i> Lihat galeri
+					</span>
+				</button>
+
+				<div class="grid grid-cols-2 gap-3 md:grid-cols-1 md:grid-rows-4 md:h-full">
+					{room.gallery.slice(0, 4).map((img, i) => (
+						<button
+							type="button"
+							class="card-hover rounded-xl overflow-hidden border border-border aspect-[4/3] md:aspect-auto block"
+							data-open-gallery={i + 1}
+						>
+							<img src={img} alt={`${room.name} foto ${i + 2}`} class="w-full h-full object-cover" loading="lazy" />
+						</button>
+					))}
+				</div>
+			</div>
+
+			<div class="flex flex-wrap gap-3 mt-6">
+				<a href="#tarif" class="inline-flex items-center gap-2 bg-accent text-bg font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full">
+					Booking {room.shortName}
+				</a>
+				<a href="#faq" class="inline-flex items-center gap-2 border border-border text-text font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full">
+					Lihat FAQ
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Lightbox dialog -->
+	<dialog id="gallery-dialog" class="backdrop:bg-black/80 bg-transparent max-w-none w-full h-full p-0 m-0">
+		<div class="relative w-full h-full flex items-center justify-center">
+			<button type="button" id="gallery-close" aria-label="Tutup" class="absolute top-5 right-5 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
+				<i class="ph ph-x"></i>
+			</button>
+			<button type="button" id="gallery-prev" aria-label="Sebelumnya" class="absolute left-4 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
+				<i class="ph ph-caret-left"></i>
+			</button>
+			<img id="gallery-img" src="" alt="" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg" />
+			<button type="button" id="gallery-next" aria-label="Berikutnya" class="absolute right-4 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
+				<i class="ph ph-caret-right"></i>
+			</button>
+		</div>
+	</dialog>
+
+	<!-- Use case + description -->
+	<section class="sec-block">
+		<div class="container-wrap grid md:grid-cols-[1fr_1fr] gap-10">
+			<div>
+				<p class="kicker"><i class="ph ph-notepad"></i>Tentang Ruangan</p>
+				<p class="font-body text-[15px] text-text leading-relaxed">{room.description}</p>
+			</div>
+			<div>
+				<p class="kicker"><i class="ph ph-target"></i>Cocok Untuk</p>
+				<p class="font-body text-[15px] text-text leading-relaxed">{room.useCase}</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Specs + Includes -->
+	<section class="sec-block">
+		<div class="container-wrap grid md:grid-cols-2 gap-8">
+			<div>
+				<p class="kicker"><i class="ph ph-ruler"></i>Spesifikasi Teknis</p>
+				<div class="rounded-2xl border border-border bg-card divide-y divide-border">
+					{room.specs.map((spec) => (
+						<div class="flex justify-between px-5 py-3.5">
+							<span class="font-body text-[13.5px] text-text-dim">{spec.label}</span>
+							<span class="font-body text-[13.5px] text-text font-medium">{spec.value}</span>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<div>
+				<p class="kicker"><i class="ph ph-check-circle"></i>Sudah Termasuk</p>
+				<div class="grid grid-cols-1 gap-3">
+					{room.includes.map((inc) => (
+						<div class="card-hover flex items-center gap-3.5 rounded-xl border border-border bg-card px-5 py-4">
+							<i class={`ph ph-${inc.icon} text-accent text-xl`}></i>
+							<span class="font-body text-[13.5px] text-text">{inc.label}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Floorplan -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-floppy-disk-back"></i>Denah Ruangan</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Rencanakan Blocking Sebelum Datang</h2>
+			<div class="focus-frame rounded-2xl border border-border overflow-hidden bg-bg-soft">
+				<span class="fc fc-tl"></span><span class="fc fc-tr"></span><span class="fc fc-bl"></span><span class="fc fc-br"></span>
+				<img src={room.floorplanImage} alt={`Denah ${room.name}`} class="w-full h-auto" loading="lazy" />
+			</div>
+		</div>
+	</section>
+
+	<!-- Pricing calculator -->
+	<section class="sec-block" id="tarif">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-tag"></i>Tarif {room.shortName}</p>
+			<div class="grid md:grid-cols-[1.1fr_1fr] gap-8">
+				<div>
+					<!-- Native radios styled via has-[:checked] — no JS needed just to
+					     show which duration is active, the browser handles the toggle
+					     state and CSS reacts to it. -->
+					<fieldset id="duration-selector" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 border-0 p-0 m-0">
+						<legend class="sr-only">Pilih durasi sewa</legend>
+						{room.pricing.map((tier, i) => (
+							<label class="cursor-pointer rounded-xl border border-border bg-card px-3 py-3 text-center transition-colors duration-200 has-[:checked]:border-accent has-[:checked]:bg-accent-soft">
+								<input type="radio" name="duration" value={tier.duration} data-price={tier.price} class="sr-only" checked={i === 0} />
+								<span class="block font-title text-[11px] text-text-dim">{tier.duration}</span>
+								<span class="block font-display text-[15px] text-text font-semibold mt-0.5">{formatRupiah(tier.price)}</span>
+							</label>
+						))}
+					</fieldset>
+					<p class="font-body text-[12.5px] text-text-dim mt-4">{room.overtimeNote}</p>
+
+					<div class="flex items-center gap-2.5 mt-6 bg-highlight-bg border border-border rounded-full px-4 py-2.5 w-fit">
+						<span class="relative inline-flex h-2.5 w-2.5">
+							<span class="absolute inline-flex h-full w-full rounded-full bg-accent animate-pin-pulse"></span>
+							<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent"></span>
+						</span>
+						<span class="font-title text-[12.5px] text-text font-semibold">Slot terdekat: {room.nextAvailable}</span>
+					</div>
+				</div>
+
+				<div class="rounded-2xl border border-border bg-card p-6">
+					<h3 class="font-title text-[14px] text-text font-semibold mb-1">Add-on Jasa Kreatif</h3>
+					<p class="font-body text-[12px] text-text-dim mb-4">Color grading mengikuti durasi sewa. MUA & stylist tarif tetap per booking.</p>
+
+					<div class="flex flex-col gap-2" id="addon-list">
+						{room.addons.map((addon) => (
+							addon.type === "tiered" ? (
+								<label class="flex items-center justify-between gap-3 rounded-xl border border-transparent px-3 py-2.5 -mx-3 cursor-pointer transition-colors duration-200 has-[:checked]:border-border has-[:checked]:bg-highlight-bg">
+									<span class="flex items-center gap-2.5">
+										<input
+											type="checkbox"
+											class="addon-checkbox accent-accent w-4 h-4"
+											data-name={addon.name}
+											data-type="tiered"
+											data-pricing={JSON.stringify(addon.pricing)}
+										/>
+										<span class="font-body text-[13.5px] text-text-muted">{addon.name}</span>
+									</span>
+									<span class="addon-price font-body text-[13.5px] text-text font-medium" data-addon-price={addon.name}>
+										{formatRupiah(addon.pricing[0].price)}
+									</span>
+								</label>
+							) : (
+								<label class="flex items-center justify-between gap-3 rounded-xl border border-transparent px-3 py-2.5 -mx-3 cursor-pointer transition-colors duration-200 has-[:checked]:border-border has-[:checked]:bg-highlight-bg">
+									<span class="flex items-center gap-2.5">
+										<input
+											type="checkbox"
+											class="addon-checkbox accent-accent w-4 h-4"
+											data-name={addon.name}
+											data-type="flat"
+											data-flat-price={addon.price}
+										/>
+										<span class="font-body text-[13.5px] text-text-muted">
+											{addon.name} <span class="text-text-dim text-[11.5px]">({addon.unit})</span>
+										</span>
+									</span>
+									<span class="addon-price font-body text-[13.5px] text-text font-medium" data-addon-price={addon.name}>
+										{formatRupiah(addon.price)}
+									</span>
+								</label>
+							)
+						))}
+					</div>
+
+					<div class="flex items-center justify-between border-t border-border mt-4 pt-4">
+						<span class="font-title text-[13.5px] text-text-dim">Total</span>
+						<span id="total-price" class="font-display text-2xl text-accent font-semibold transition-transform duration-200">
+							{formatRupiah(room.pricing[0].price)}
+						</span>
+					</div>
+
+					<a
+						id="booking-cta"
+						href="#"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mt-5 w-full inline-flex justify-center items-center gap-2 bg-accent text-bg font-title text-[13.5px] font-semibold px-6 py-3.5 rounded-full transition-opacity duration-200 hover:opacity-90"
+					>
+						<i class="ph ph-whatsapp-logo"></i> Booking via WhatsApp
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Portfolio filtered by room -->
+	<section class="sec-block">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-images"></i>Diproduksi di {room.shortName}</p>
+			<h2 class="font-display text-2xl text-text font-semibold mb-6">Hasil Nyata dari Ruangan Ini</h2>
+			<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+				{room.portfolio.map((item) => (
+					<div class="card-hover rounded-xl overflow-hidden border border-border bg-card first:col-span-2 md:first:col-span-1">
+						<div class="aspect-[4/5] bg-bg-soft overflow-hidden">
+							<img src={item.image} alt={item.title} class="w-full h-full object-cover" loading="lazy" />
+						</div>
+						<p class="font-body text-[13.5px] text-text px-4 py-3">{item.title}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ -->
+	<section class="sec-block" id="faq">
+		<div class="container-wrap">
+			<p class="kicker"><i class="ph ph-question"></i>Tanya Jawab {room.shortName}</p>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+				{room.faqs.map((faq) => (
+					<details class="border-b border-border py-4 group">
+						<summary class="font-title text-[14.5px] text-text font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+							<span>{faq.q}</span>
+							<i class="ph ph-plus text-accent shrink-0 group-open:hidden"></i>
+							<i class="ph ph-minus text-accent shrink-0 hidden group-open:block"></i>
+						</summary>
+						<p class="font-body text-[13.5px] text-text-muted mt-3 leading-relaxed">{faq.a}</p>
+					</details>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Cross-sell -->
+	{otherRooms.length > 0 && (
+		<section class="sec-block">
+			<div class="container-wrap">
+				<p class="kicker"><i class="ph ph-arrows-left-right"></i>Ruangan Lain</p>
+				<div class="grid md:grid-cols-2 gap-6">
+					{otherRooms.map((other) => (
+						<a href={`/ruangan/${other.slug}`} class="card-hover flex items-center gap-4 md:gap-5 rounded-2xl border border-border bg-card p-4 md:p-5">
+							<div class="w-16 h-16 md:w-24 md:h-24 rounded-xl overflow-hidden bg-bg-soft shrink-0">
+								<img src={other.heroImage} alt={other.name} class="w-full h-full object-cover" />
+							</div>
+							<div class="min-w-0">
+								<h3 class="font-display text-base md:text-lg text-text font-semibold mb-1 truncate">{other.name}</h3>
+								<p class="font-body text-[12.5px] md:text-[13px] text-text-muted mb-2 line-clamp-2">{other.tagline}</p>
+								<span class="font-title text-[12.5px] text-accent font-semibold inline-flex items-center gap-1">
+									Lihat Ruangan <i class="ph ph-arrow-up-right"></i>
+								</span>
+							</div>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Sticky mobile CTA. bg-nav-bg/95 gives a solid-ish fallback so this never
+	     renders flat black if backdrop-blur isn't supported by the capture/browser. -->
+	<div class="fixed bottom-0 left-0 right-0 z-40 bg-nav-bg/95 backdrop-blur border-t border-border px-5 py-3.5 flex items-center justify-between md:hidden">
+		<div>
+			<p class="font-title text-[11px] text-text-dim uppercase tracking-wide">{room.shortName}</p>
+			<p class="font-display text-base text-accent font-semibold leading-tight" id="sticky-total">{formatRupiah(room.pricing[0].price)}</p>
+		</div>
+		<a href="#tarif" class="bg-accent text-bg font-title text-[13px] font-semibold px-5 py-3 rounded-full">Booking</a>
+	</div>
+	<div class="h-20 md:hidden"></div>
+
+	<script define:vars={{ gallery: [room.heroImage, ...room.gallery] }}>
+		const dialog = document.getElementById("gallery-dialog");
+		const img = document.getElementById("gallery-img");
+		const closeBtn = document.getElementById("gallery-close");
+		const prevBtn = document.getElementById("gallery-prev");
+		const nextBtn = document.getElementById("gallery-next");
+		let currentIndex = 0;
+
+		function showFlash() {
+			const flash = document.createElement("span");
+			flash.className = "fixed top-1/2 left-1/2 w-16 h-16 rounded-full bg-white animate-shutter-flash pointer-events-none z-[60]";
+			flash.style.transform = "translate(-50%, -50%)";
+			document.body.appendChild(flash);
+			setTimeout(() => flash.remove(), 550);
+		}
+
+		function openGallery(index) {
+			currentIndex = index;
+			img.src = gallery[currentIndex];
+			img.alt = `Foto ${currentIndex + 1}`;
+			showFlash();
+			dialog.showModal();
+		}
+
+		function step(delta) {
+			currentIndex = (currentIndex + delta + gallery.length) % gallery.length;
+			img.src = gallery[currentIndex];
+		}
+
+		document.querySelectorAll("[data-open-gallery]").forEach((el) => {
+			el.addEventListener("click", () => openGallery(Number(el.dataset.openGallery)));
+		});
+		closeBtn?.addEventListener("click", () => dialog.close());
+		prevBtn?.addEventListener("click", () => step(-1));
+		nextBtn?.addEventListener("click", () => step(1));
+		dialog?.addEventListener("click", (e) => {
+			if (e.target === dialog) dialog.close();
+		});
+	</script>
+
+	<!-- Booking calculator. Visual toggle state (active duration, checked addon
+	     row) is handled entirely by has-[:checked] in the markup above — this
+	     script only reads values and does the math. -->
+	<script define:vars={{ roomName: room.name, whatsappNumber: WHATSAPP_NUMBER }}>
+		const formatRupiah = (n) => "Rp " + n.toLocaleString("id-ID");
+
+		const durationInputs = Array.from(document.querySelectorAll('input[name="duration"]'));
+		const addonCheckboxes = Array.from(document.querySelectorAll(".addon-checkbox"));
+		const totalEl = document.getElementById("total-price");
+		const stickyTotalEl = document.getElementById("sticky-total");
+		const bookingCta = document.getElementById("booking-cta");
+
+		const selectedDuration = () => durationInputs.find((r) => r.checked)?.value ?? "";
+		const selectedRoomPrice = () => Number(durationInputs.find((r) => r.checked)?.dataset.price ?? 0);
+
+		function tieredPriceFor(cb) {
+			const pricing = JSON.parse(cb.dataset.pricing);
+			const match = pricing.find((p) => p.duration === selectedDuration()) ?? pricing[0];
+			return match.price;
+		}
+
+		function addonPrice(cb) {
+			return cb.dataset.type === "tiered" ? tieredPriceFor(cb) : Number(cb.dataset.flatPrice ?? 0);
+		}
+
+		function popTotal() {
+			totalEl?.classList.add("scale-105");
+			setTimeout(() => totalEl?.classList.remove("scale-105"), 150);
+		}
+
+		function recalc() {
+			// keep every tiered addon's displayed price in sync with the chosen duration
+			addonCheckboxes.forEach((cb) => {
+				if (cb.dataset.type !== "tiered") return;
+				const priceEl = cb.closest("label")?.querySelector(".addon-price");
+				if (priceEl) priceEl.textContent = formatRupiah(tieredPriceFor(cb));
+			});
+
+			const chosenAddons = addonCheckboxes.filter((cb) => cb.checked);
+			const total = selectedRoomPrice() + chosenAddons.reduce((sum, cb) => sum + addonPrice(cb), 0);
+
+			if (totalEl) totalEl.textContent = formatRupiah(total);
+			if (stickyTotalEl) stickyTotalEl.textContent = formatRupiah(total);
+			popTotal();
+
+			if (bookingCta) {
+				const lines = [
+					`Halo, saya mau booking ${roomName}.`,
+					`Durasi: ${selectedDuration()}`,
+					chosenAddons.length
+						? `Add-on: ${chosenAddons.map((cb) => `${cb.dataset.name} (${formatRupiah(addonPrice(cb))})`).join(", ")}`
+						: null,
+					`Estimasi total: ${formatRupiah(total)}`,
+				].filter(Boolean);
+				bookingCta.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
+			}
+		}
+
+		document.getElementById("duration-selector")?.addEventListener("change", recalc);
+		document.getElementById("addon-list")?.addEventListener("change", recalc);
+
+		recalc();
+	</script>
+
+	<script>
+		import { animate, inView } from "motion";
+
+		inView(".sec-block", ({ target }) => {
+			animate(target, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, easing: "ease-out" });
+		});
+	</script>
+</Layout>
